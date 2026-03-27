@@ -487,11 +487,58 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
     }
 ```
 
-  
+## 2026.3.27打卡day10
+**1.学习Java基础**
+* 复习集合框架
+* 文件流
+* 字节流
+* 字符流
+* 缓冲流
+* 转换流
+* 序列流
+* transient关键字
+* 序列接口Serializable
+
+遇到的问题和思考：  
+**1. 在使用File创建文件的时候，已经设置了文件名或者文件路径但是查看目录并没有找到刚刚创建的文件**
+* **原因**：创建的这个文件相当于一个门牌号，只有新创建了这个门牌号，才能拿着它去看实际有没有这个文件，即：  
+> File 类的构造方法不会检验这个文件或目录是否真实存在，因此无论该路径下是否存在文件或者目录，都不影响 File 对象的创建。  
+
+**2. 如果使用字节流来读取字符，若字符中包含中文字符，如果使用字节数组读取多个字节时，在设置偏移量offset和len参数时
+我还是按照普通英文字符的大小设置索引，导致读出来的中文字符包含乱码**
+* **原因**：UTF-8规定中文字符需要3个字节，我设置的偏移量不应该为1，应该为3，改正措施：可以采用字符流读入或者使用转换流进行包装，或者将偏移量改变(**字符流 = 字节流 + 编码表**)
+
+> 在 Java 中，常用的字符编码有 ASCII、ISO-8859-1、UTF-8、UTF-16 等。其中，ASCII 和 ISO-8859-1 只能表示部分字符，而 UTF-8 和 UTF-16 可以表示所有的 Unicode 字符，包括中文字符。
+> 当我们使用 `new String(byte bytes[], int offset, int length) `将字节流转换为字符串时，Java 会根据 UTF-8 的规则将每 3 个字节解码为一个中文字符，从而正确地解码出中文。
+> 尽管字节流也有办法解决乱码问题，但不够直接，于是就有了字符流，专门用于处理文本文件（音频、图片、视频等为非文本文件）。
+
+**3. 在使用RandomAccessFile进行读写操作时，虽然读写对象是中文，但我使用writeUTF方法和readUTF方法时却没有出现乱码**
+* **原因**：writeUTF 和 readUTF 这两个方法，其实是 Java 给它外挂的一个**字符翻译插件**，其会根据UTF-8编码来将我的字节进行转化
+  * 在使用时还需要注意`void seek(long pos)`使得文件指针移动，
+> RandomAccessFile 是 Java 中一个非常特殊的类，它既可以用来读取文件，也可以用来写入文件。与其他 IO 类（如 FileInputStream 和 FileOutputStream）不同，RandomAccessFile 允许您跳转到文件的任何位置，从那里开始读取或写入。这使得它特别适用于需要在文件中随机访问数据的场景，如数据库系统。
+
+**4. 如果要读取的内容包含中文字符的话，我可以使用套娃，将FileInputStream包装到InputStreamReader里面，然后用InputStreamReader对象进行读取，这样就能读取完整中文字符了，但如果想快一点，效率高一点，
+可以把前两者再包装到BufferedReader里面，这样可以读得更快，然后还可以按行读取**
+`BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("data3.txt"), StandardCharsets.UTF_8)))`
+
+**5. 序列化与反序列化时，如果要序列化对象的时候，要先对该类实现Serializable接口，或者Externalizable接口**
+> transient 关键字用于修饰类的成员变量，在序列化对象时，被修饰的成员变量不会被序列化和保存到文件中。其作用是告诉 JVM 在序列化对象时不需要
+> 将该变量的值持久化，这样可以避免一些安全或者性能问题。但是，transient 修饰的成员变量在反序列化时会被初始化为其默认值（如 int 类型会被初
+> 始化为 0，引用类型会被初始化为 null），因此需要在程序中进行适当的处理。
+> 
+> transient 关键字和 static 关键字都可以用来修饰类的成员变量。其中，transient 关键字表示该成员变量不参与序列化和反序列化，而 static 关键字表示该成
+> 员变量是属于类的，不属于对象的，因此不需要序列化和反序列化。
+> 
+> 在 Serializable 和 Externalizable 接口中，transient 关键字的表现也不同，在 Serializable 中表示该成员变量不参与序列化和反序列化，在 Externalizable 中不起作用，因为 Externalizable 接口需要实现 readExternal 和 writeExternal 方法，需要手动完成序列化和反序列化的过程。
 
 
-
-
+**2.java基础语法练习**
+* 文件流读写操作
+* 字节流读写操作
+* 字符流读写操作
+* 使用HashMap实现按序号拷贝诗句
+* 缓冲流copy视频效率比较
+* 序列化与反序列化操作
 
 
 
