@@ -416,7 +416,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
         return dummy.next;
     }
 ```
-## 2026.3.24打卡Day8
+## 2026.3.24打卡Day9
 **1.学习java基础**
 * Arrays相关方法使用
   > public static String toString(数组) //把数组拼成一个字符串  
@@ -467,7 +467,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
     }
 ```
 
-## 2026.3.25打卡day9
+## 2026.3.25打卡day10
 **1.学习Java基础**
 * 学习collection相关方法
 * List、Map、queue、set相关增删改查
@@ -487,7 +487,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
     }
 ```
 
-## 2026.3.27打卡day10
+## 2026.3.27打卡day11
 **1.学习Java基础**
 * 复习集合框架
 * 文件流
