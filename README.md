@@ -544,8 +544,12 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
 
   
   
+## 2026.3.28打卡day12
 
+**1.java基础学习**
+* IO流
 
+```java
 
 
 
