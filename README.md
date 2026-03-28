@@ -218,7 +218,7 @@
 
 包括登录系统（注册、登录、忘记密码、退出），管理系统（增、删、改、查、退出）并对输入的字符串都具有检验的功能，若输入的不合法，则需要重新输入
 
-![img.png](img.png)
+![img_1.png](picture/img_1.png)
 #ps:我的第一个项目，耗时长达4个小时，但收获也颇丰~
 
 
@@ -547,9 +547,50 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
 ## 2026.3.28打卡day12
 
 **1.java基础学习**
-* IO流
+* 打印流: PrintWriter(字符流) 和 PrintStream(字节流)
+* Stream流的相关操作  
 
+**2.Java语法练习**
+* 打印流写入文件(记得要flush)
+* stream流相关练习,链式编程,Map,List相关操作
+![QQ_1774709141068.png](picture/QQ_1774709141068.png)
+
+**3.leetcode刷题**
+
+* 5.最长回文子串(中心扩展法)被爆杀了
 ```java
+//中心扩展
+    public static String longestPalindrome2(String s) {
+        //判断特殊情况
+        if (s == null || s.length() < 2) return s;
+        int start=0,maxlen=1;
+        for (int i = 0; i < s.length(); i++) {
+            //回文长度为奇数时
+            int len1=expandAroundCenter(s,i,i);
+            //回文长度为偶数时
+            int len2=expandAroundCenter(s,i,i+1);
+            //更新索引
+            int len=Math.max(len1,len2);
+            if (len>maxlen) {
+                maxlen=len;
+                start=i-(len-1)/2;
+            }
+        }
+        return s.substring(start,start+maxlen);
+    }
+
+    public static int expandAroundCenter(String s, int left, int right) {
+
+        while(left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
+        }
+        //原来长度应该为right-left+1,但是由于出循环left和right都多走了一步,所以需要给原来长度-2,即:right-left-1;
+        return right-left-1;
+    }
+```
+刷leetcode还是刷得太少了...
+
 
 
 
