@@ -589,7 +589,24 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
         return right-left-1;
     }
 ```
-刷leetcode还是刷得太少了...
+
+## 2026.3.30打卡day13
+**1.java基础学习**
+* 多线程操作
+* 六种状态
+* synchronized关键字
+* 等待唤醒机制
+
+
+**2.java语法练习**
+* 三种方式创建线程
+* 抢红包
+* 找奇数
+* 送礼物
+* 卖门票
+* 厨师与吃货
+
+
 
 
 
