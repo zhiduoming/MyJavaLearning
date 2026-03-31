@@ -607,6 +607,49 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
 * 厨师与吃货
 
 
+## 2026.3.31打卡Day14
+**1.java基础学习**
+线程池
+
+**2.leetcode刷题**
+
+* 2.两数相加
+```java
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    ListNode dummy = new ListNode(0);
+    ListNode cur = dummy;
+    int cin = 0;
+
+    // 只要 l1 有数，或者 l2 有数，或者还有没进完的位，就继续跑
+    while (l1 != null || l2 != null || cin != 0) {
+        int v1 = (l1 != null) ? l1.val : 0; // 如果 l1 跑完了，就当它是 0
+        int v2 = (l2 != null) ? l2.val : 0; // 如果 l2 跑完了，就当它是 0
+        
+        int sum = v1 + v2 + cin;
+        cin = sum / 10;
+        cur.next = new ListNode(sum % 10);
+        
+        cur = cur.next;
+        if (l1 != null) l1 = l1.next;
+        if (l2 != null) l2 = l2.next;
+    }
+    return dummy.next;
+}
+```
+* 1.两数之和
+```java
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{map.get(target - nums[i]), i};
+            }
+            map.put(nums[i], i);
+        }
+        return new int[0];
+    }
+```
+
 
 
 
