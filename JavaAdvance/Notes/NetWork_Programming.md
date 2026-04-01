@@ -193,7 +193,7 @@ public class client {
 }
 ```
 
-sever（服务器）
+server（服务器）
 
 ```java
 public class sever {
@@ -226,6 +226,7 @@ public class sever {
 
 * 在创建ServerSocket对象时需要传入端口号，该端口号必须与客户端指定的端口相一致。
 * 在与客户端建立连接的过程中，需要用到三次握手四次挥手的协议
+* 在使用 TCP 传输文件时，客户端发完数据必须调用 shutdownOutput() 给服务端发送结束标记，否则服务端的 read() 会永远陷入死等阻塞
 
 
 
@@ -239,7 +240,7 @@ public class sever {
 
 1. 第一次握手： Client发送连接请求，Server被动监听
    * 报文内容：SYN=1，seq=x（SYN即`Synchronize`，同步，当SYN=1时，表示这是一个尝试建立连接的报文，seq即`Sequence Number`, 序号，是发送端的数据包序号，用来标记当前发送的数据在整个数据流中的位置，防止数据乱序）
-2. 第二次握手：Sever确认并发起连接请求
+2. 第二次握手：Server确认并发起连接请求
    * 报文内容：SYN=1 ，ACK=1，seq=y, ack=x+1 (ACK即Acknowlegment ,确认，当ACK=1时，表示确认收到了对方的数据，建立连接后，所有报文的ACK都必须为1，ack即Acknowlege Number ,确认号，期望收到对方下一个报文的序号)
 3. 第三次握手：Client确认Server的请求
    * 报文内容：ACK=1 ，seq =x+ 1，ack=y+1（客户端收到了服务端的同步确认，客户端将ACK置为1，确认号ack设置为y+1表示收到了服务端的y，序号seq为x+1）
@@ -252,9 +253,9 @@ public class sever {
 
 1. 第一次挥手：Client发送断开请求
    * 报文内容： FIN=1，seq=u（客户端停止发送数据，发送FIN报文，序列号为u，此时客户端进入半关闭状态，只能接收，不能发送）
-2. 第二次挥手：Sever确认Client的断开请求
+2. 第二次挥手：Server确认Client的断开请求
    * 报文内容：ACK=1，seq=v，ack=u+1（服务端收到ACK进行确认，确认号ack为u+1，此时客户端到服务端的连接被释放，但是服务端可能还有尚未处理完的数据需要继续发送给客户端，所以服务端此时还不能立刻发送自己的FIN）
-3. 第三次挥手：Sever发送断开请求
+3. 第三次挥手：Server发送断开请求
    * 报文内容：FIN=1，ACK=1，seq=w，ack=u+1（服务端的所有数据也发送完毕了，底层调用 `close()`，向客户端发送 FIN 报文，请求关闭服务端到客户端方向的连接）
 4. 第四次挥手：Client 确认 Server 的断开请求
    * 报文内容：ACK=1，seq=u+1，ack=w+1(客户端发送最后的 ACK 后，连接**并没有立刻彻底释放**，而是必须在 `TIME-WAIT` 状态等待 **2MSL**（Maximum Segment Lifetime，报文最大生存时间，通常为 1-4 分钟）
