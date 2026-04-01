@@ -3,6 +3,10 @@
 
 # 如梦初醒
 
+[toc]
+
+
+
 ## 2025.3.16打卡 Day 1
 **1. 学习JavaSE基础：**
 * 方法的定义和调用
@@ -543,7 +547,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
 
 
   
-  
+
 ## 2026.3.28打卡day12
 
 **1.java基础学习**
@@ -654,5 +658,22 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
 
 
+## 2026.4.1打卡day15
 
 
+
+1. **Java基础学习**
+
+* 网络编程三要素
+* UDP协议
+* TCP协议
+* 单播组播广播
+* 三次握手四次挥手
+
+2. **Java语法练习**
+
+* UDP相关类`DatagramSocket`,`DataPackageSocket`的使用
+* TCP相关类`Socket`,`ServerSocket`的使用
+* 各种服务端与客户端的练习
+
+os ： 预计明天收官Java基础！！!
