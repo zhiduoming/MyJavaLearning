@@ -471,7 +471,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
     }
 ```
 
-## 2026.3.25打卡day10
+## 2026.3.25打卡Day10
 **1.学习Java基础**
 * 学习collection相关方法
 * List、Map、queue、set相关增删改查
@@ -491,7 +491,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
     }
 ```
 
-## 2026.3.27打卡day11
+## 2026.3.27打卡Day11
 **1.学习Java基础**
 * 复习集合框架
 * 文件流
@@ -548,7 +548,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
 
   
 
-## 2026.3.28打卡day12
+## 2026.3.28打卡Day12
 
 **1.java基础学习**
 * 打印流: PrintWriter(字符流) 和 PrintStream(字节流)
@@ -594,7 +594,7 @@ public static ListNode removeNthFromEnd(ListNode head, int n) {
     }
 ```
 
-## 2026.3.30打卡day13
+## 2026.3.30打卡Day13
 **1.java基础学习**
 * 多线程操作
 * 六种状态
@@ -658,7 +658,7 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
 
 
-## 2026.4.1打卡day15
+## 2026.4.1打卡Day15
 
 
 
@@ -677,3 +677,26 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 * 各种服务端与客户端的练习
 
 os ： 预计明天收官Java基础！！!
+
+
+
+## 2026.4.2打卡Day16
+
+1.**Java基础学习**
+
+* 反射三种获取class的方法
+* 反射获取类的构造方法，实例，成员方法，字段
+* 动态代理
+
+2.**MySQL学习**
+
+* 数据库相关概念
+* MySQL数据库的数据模型
+* 安装MySQL
+* MySQL的连接与启动
+* SQL语句通用语法
+* SQL数据类型
+* DDL语句操作
+* 安装DataGrip并连接数据库
+
+os: Java基础完结撒花！！！开始进攻数据库
