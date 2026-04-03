@@ -700,3 +700,19 @@ os ： 预计明天收官Java基础！！!
 * 安装DataGrip并连接数据库
 
 os: Java基础完结撒花！！！开始进攻数据库
+
+
+
+## 2026.4.3打卡Day17
+
+**1.MySQL学习（至DCL）**
+
+* DML增删改操作
+* DQL基础查询
+* DQL条件查询
+* DQL分组查询
+* DQL聚合函数
+* DQL排序查询
+* DQL分页查询
+
+最近迷上typora上写笔记了，我的MySQL笔记已同步至GitHub
