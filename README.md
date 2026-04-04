@@ -676,7 +676,7 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 * TCP相关类`Socket`,`ServerSocket`的使用
 * 各种服务端与客户端的练习
 
-os ： [网络编程笔记]([MyJavaLearning/JavaBasic/Notes/NetWork_Programming.md at main · zhiduoming/MyJavaLearning](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaBasic/Notes/NetWork_Programming.md))已同步至GitHub预计明天收官Java基础！！!
+os ： [网络编程笔记](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaBasic/Notes/NetWork_Programming.md)已同步至GitHub预计明天收官Java基础！！!
 
 
 
@@ -688,7 +688,7 @@ os ： [网络编程笔记]([MyJavaLearning/JavaBasic/Notes/NetWork_Programming.
 * 反射获取类的构造方法，实例，成员方法，字段
 * 动态代理
 
-[反射笔记]([MyJavaLearning/JavaBasic/Notes/Reflection.md at main · zhiduoming/MyJavaLearning](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaBasic/Notes/Reflection.md))已同步到GitHub
+[反射笔记](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaBasic/Notes/Reflection.md)已同步到GitHub
 
 2.**MySQL学习**
 
@@ -717,9 +717,7 @@ os: Java基础完结撒花！！！开始进攻数据库
 * DQL排序查询
 * DQL分页查询
 
-最近迷上typora上写笔记了，我的[MySQL笔记]([MyJavaLearning/MySQL_Basic/Notes/MySQL.md at main · zhiduoming/MyJavaLearning](https://github.com/zhiduoming/MyJavaLearning/blob/main/MySQL_Basic/Notes/MySQL.md))已同步至GitHub
-
-
+最近迷上了在 Typora 上写笔记，我的 [MySQL 详细笔记](https://github.com/zhiduoming/MyJavaLearning/blob/main/MySQL_Basic/Notes/MySQL.md) 已同步至 GitHub。
 
 ## 2026.4.4打卡Day18
 
