@@ -676,7 +676,7 @@ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 * TCP相关类`Socket`,`ServerSocket`的使用
 * 各种服务端与客户端的练习
 
-os ： 预计明天收官Java基础！！!
+os ： [网络编程笔记]([MyJavaLearning/JavaBasic/Notes/NetWork_Programming.md at main · zhiduoming/MyJavaLearning](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaBasic/Notes/NetWork_Programming.md))已同步至GitHub预计明天收官Java基础！！!
 
 
 
@@ -687,6 +687,8 @@ os ： 预计明天收官Java基础！！!
 * 反射三种获取class的方法
 * 反射获取类的构造方法，实例，成员方法，字段
 * 动态代理
+
+[反射笔记]([MyJavaLearning/JavaBasic/Notes/Reflection.md at main · zhiduoming/MyJavaLearning](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaBasic/Notes/Reflection.md))已同步到GitHub
 
 2.**MySQL学习**
 
@@ -715,4 +717,17 @@ os: Java基础完结撒花！！！开始进攻数据库
 * DQL排序查询
 * DQL分页查询
 
-最近迷上typora上写笔记了，我的MySQL笔记已同步至GitHub
+最近迷上typora上写笔记了，我的[MySQL笔记]([MyJavaLearning/MySQL_Basic/Notes/MySQL.md at main · zhiduoming/MyJavaLearning](https://github.com/zhiduoming/MyJavaLearning/blob/main/MySQL_Basic/Notes/MySQL.md))已同步至GitHub
+
+
+
+## 2026.4.4打卡Day18
+
+**1.MySQL学习（至事务）**
+
+* DCL语句
+* 函数（数值函数，日期函数，字符串函数，流程函数）
+* 约束
+* 外键级联
+
+os ：今天就先这样，搞我的项目结构搞了3个多小时，DataGrip连接GitHub仓库遇到各种报错，最后重构了项目结构，现在看着清爽多了
