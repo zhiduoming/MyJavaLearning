@@ -234,7 +234,7 @@ CREATE TABLE 表名（
 
 **查看当前数据库所有表**`SHOW TABLES;`  
 
-<img src="./images/image-20260402210208388.png" alt="image-20260402210208388" style="zoom: 100%;" />
+<img src="images/image-20260402210208388.png" alt="image-20260402210208388" style="zoom: 100%;" />
 
 
   **查询表结构**`DESC 表名;`  
@@ -469,7 +469,7 @@ FROM emp;
 
 ##### DQL-条件查询
 
-<img src="./images/image-20260404001019831.png" alt="image-20260404001019831" style="zoom:50%;" />
+<img src="images/image-20260404001019831.png" alt="image-20260404001019831" style="zoom:50%;" />
 
 **条件:**
 
