@@ -188,3 +188,5 @@ SELECT *
 FROM emp
 LIMIT 10,5;
 
+USE itcast;
+SHOW TABLES ;
