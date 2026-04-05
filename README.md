@@ -721,7 +721,7 @@ os: Java基础完结撒花！！！开始进攻数据库
 
 ## 2026.4.4打卡Day18
 
-**1.MySQL学习（至事务）**
+**1.MySQL学习（至多表查询）**
 
 * DCL语句
 * 函数（数值函数，日期函数，字符串函数，流程函数）
@@ -729,3 +729,40 @@ os: Java基础完结撒花！！！开始进攻数据库
 * 外键级联
 
 os ：今天就先这样，搞我的项目结构搞了3个多小时，DataGrip连接GitHub仓库遇到各种报错，最后重构了项目结构，现在看着清爽多了
+
+## 2026.4.5打卡Day19
+
+1.MySQL基础
+
+* 多表关系
+* 内连接
+* 外连接
+* 自连接
+* 联合查询
+* 四种子查询（标量子查询，列子查询，行子查询，表子查询）
+* 事务四大特性（ACID）
+* 事务操作
+* 并发事务和隔离级别
+
+2.leetcode刷题两道
+
+* 175.组合两个表
+
+```sql
+-- leetcode 175.组合两个表
+SELECT p.firstname,p.lastname,a.city,a.state
+FROM person p,
+LEFT JOIN Address a ON p.PersonId= a.PersonId;
+```
+
+* 176.第二高的薪水(外部 `SELECT` 发现括号里没东西，它会强行生成一行数据，并把值设为 **`NULL`**。)
+
+```sql
+-- leetcode 176.第二高的薪水
+SELECT (SELECT DISTINCT salary
+        FROM employee e
+        ORDER BY e.salary DESC
+        LIMIT 1,1) AS secondhighestsalary;
+```
+
+os: MySQL基础完结，后面进军JDBC和Mybatis，忘东西忘得有点快，快点开始搞项目，以用促学！
