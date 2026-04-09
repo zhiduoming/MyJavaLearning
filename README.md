@@ -794,6 +794,8 @@ os: MySQL基础完结，后面进军JDBC和Mybatis，忘东西忘得有点快，
 * 测试
 * 单元测试JUnit相关用法
 
+[JavaWeb相关笔记](https://github.com/zhiduoming/MyJavaLearning/blob/main/JavaWeb/Notes/JavaWeb.md)已同步至GitHub
+
 ## 2026.4.9打卡Day21
 
 1.JavaWeb
