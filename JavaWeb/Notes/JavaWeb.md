@@ -542,3 +542,236 @@ public class ResponseController {
 
 注意：在`HttpServletResponse`中，一般情况下**不需要**我们手动设置状态码和响应头，服务器会根据请求逻辑**自动生成**
 
+## Mybatis
+
+### Mybatis相对于JDBC的提升
+
+> 1. 开发效率更高：不用手写大量 Connection/PreparedStatement/ResultSet 模板代码。
+> 2. SQL 与 Java 解耦：SQL 写在 Mapper XML 或注解里，维护更清晰。
+> 3. 自动对象映射：查询结果可直接映射成 Java 对象（resultMap），少写手动 set。
+> 4. 参数处理更安全：#{} 自动做预编译参数绑定，减少 SQL 注入风险。
+> 5. 动态 SQL 更强：if/where/trim/foreach 等标签方便拼复杂条件。
+> 6. 事务整合更好：和 Spring/Spring Boot 配合后，事务管理比纯 JDBC 顺滑很多。
+> 7. 缓存能力：内置一级缓存、可选二级缓存，减少重复查询。
+> 8. 插件扩展：可做分页、审计、性能统计等拦截扩展。
+
+一句话：JDBC 更底层、可控但繁琐；MyBatis 在保留 SQL 可控性的同时，大幅降低了数据库层开发成本。
+
+### Mybatis的数据库连接配置：
+
+需要在`application.properties`文件中定义如下配置
+
+```properties
+#项目名称
+spring.application.name=springboot-Mybatis-demo01
+#数据库的url
+spring.datasource.url=jdbc:mysql://localhost:3306/web01
+#数据库驱动
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#数据库用户名
+spring.datasource.username=root
+#数据库密码
+spring.datasource.password=password
+
+#配置MyBatis的日志输出
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+```
+
+### 数据库连接池
+
+数据库连接池是一个容器，使用了它就可以更好地来分配和管理数据库的连接。
+
+原本每次和数据库进行连接都需要重新创建一个connection对象，在使用完之后又要去重新关闭它。但是如果是用了数据库连接池，程序在启动的时候就会在数据库连接池中初始化一些连接对象connection，然后如果要执行对应的sql语句，则会直接去拿连接池中现有的connection，sql语句执行完毕之后又会重新归还到连接池当中，如果其他客户端要去执行sql语句，则又会在连接池中获取对应的连接，用完后又归还....
+
+连接池为了解决数据库连接遗漏问题（即数据库连接池当中的连接越用越少），当客户端拿到connection之后占用着但不执行对应的操作且不归还给连接池，则这样的connection就会处于空闲状态，为了处理这样的情况，连接池会自动释放空闲时间超过预设的最大空闲时间的连接对象connection，这样就避免了数据库连接遗漏的问题。
+
+通过这些操作，使得数据库连接池具有这三种特性：
+
+* 达到了连接的复用，避免了每次都要重开一个连接再关闭
+* 提升了程序运行的效率，提升了系统的访问性能
+* 避免了数据库连接遗漏
+
+为了实现数据库连接池，sun公司设计了一个数据库连接池的接口：`Datasource`，然后由各个第三方组织去实现这个接口，在这个接口中定义了获取连接的方法：
+
+```java
+Connection getConnection() throws SQLException;
+```
+
+由各个第三方组织去实现该接口，同时重写里面的这个方法
+
+目前市面上比较具有代表性的第三方组织实现的连接池有
+
+`hikari`(Springboot默认)，`Druid`,`DBCP`,`C3P0`
+
+如果需要切换，则需要引入对应的依赖，然后指定选用的连接池类型即可
+
+
+
+### 基于Mybatis的增删改查操作
+
+#### 删除操作
+
+在定义mapper接口的时候，定义删除的方法，然后加上`@Delete()`注解，并在括号中写上对应的DML删除操作的sql，然后要注意的地方是，这个方法是有返回值的，返回值为执行该sql影响的记录数，在定义方法类型时，如果需要使用该返回值，可以将类型定义为`Integer`，也可以直接定义为`void`。
+
+在（）中写sql语句时，例如
+
+```java
+@Delete("delete from user where id = #{id}")
+public void DeleteById(Interger id);
+```
+
+使用`#{...}`，`#`是占位符，会将`#{...}`转换为`?`，避免了sql注入，生成了预编译的sql，这样提高了安全性与效率
+
+使用`${...}`,`$`是字符串拼接符号，会直接将（）中的参数值直接拼接在sql中，会导致sql注入，不安全，效率低，不推荐
+
+#### 增添操作
+
+需要在Mapper接口中定义insert方法，上面加入`@Insert()`注解，然后在( )中写上对应的sql语句，注意，如果要插入的字段过多，则可以在定义方法参数时直接传递对应的对象，将需要插入的属性封装在对象当中，例如插入用户信息可以将信息封装在一个User对象当中
+
+```java
+@Insert("insert into user (username, password, name, age) values (#{username},#{password},#{name},#{age})")
+    public void insert(User user);
+```
+
+然后在执行之前new一个User对象：
+
+```java
+ @Test
+    public void testInsert(){
+        User user =new User(null,"yangyang","123456","杨洋",28);
+        userMapper.insert(user);
+    }
+```
+
+#### 修改操作
+
+很简单，没啥要注意的
+
+```Java
+    @Update("update user set username =#{username},password=#{password} ,name =#{name}, age 	=#{age} where id =#{id}")
+    public void update(User user);
+
+//调用
+	@Test
+    public void testUpdate(){
+        User user = new User(1 ,"zhouyu" ,"123456","周瑜",20);
+        userMapper.update(user);
+    }
+```
+
+查询操作
+
+要注意的是，如果是查询操作，那么就需要返回值，可以将返回值定义为一个对象，如果有多个查询结果，则可以定义为一个集合，在传递查询条件的参数时，如果我们使用的是springboot的官方骨架创建的springboot项目，那么就直接传递参数类型和参数名称，不需要使用`Param()`注解，但也可以加上，因为如果不是基于springboot官方创建的springboot项目，就必须要加上该注解，具体操作如下：
+
+```java
+@Select("select * from user where username =#{username} and password =#{password}")
+    public User findByUsernameAndPassword(@Param("username")String username,@Param("password")String password);
+```
+
+`@Param()`注解括号中的参数必须和`#{...}`中传递的参数名称相同相对应
+
+然后调用的时候使用对应的返回值类型来接收即可。
+
+
+
+另一种方式来实现语句映射：使用xml配置文件来映射sql语句
+
+规则：
+
+* 我定义的xml的映射文件的名称要与Mapper这个接口的名称相同，比如我的Mapper接口叫`UserMapper`，那么我的xml文件就要命名为：`UserMapper.xml`
+
+* xml映射文件中有个`namespace`属性，然后要让这个属性值和我的**Mapper接口的全限定名**保持一致，例如，我的包名叫做`com.github.zhiduoming.Mapper`，那么这个全限定名就为`com.github.zhiduoming.Mapper.UserMapper`
+
+* xml映射文件中sql语句中的id要与Mapper接口中的方法名保持一致，并保持返回类型一致。例如：
+
+  ```xml
+  <select id="findAll" resultType="com.github.zhiduoming.pojo.User">
+      select id, username , password , name , age from user
+  </select>
+  ```
+
+  由于我的`findAll`方法的返回值是`User`，然后`User`这个类又定义在`pojo`这个包下，组织名叫`com.github.zhiduoming`所以这个`resultType`就等于`"com.github.zhiduoming.pojo.User"`
+
+然后不同的sql语句具有不同的标签，比如select就有select标签，这些sql语句的映射文件全部包裹在<mapper>和</mapper>
+
+之间
+
+具体配置文件如下：
+
+如果使用了xml映射文件来定义sql语句，那么就不能用注解来定义了，二者不能重复。
+
+[官方文档](mybatis.p2hp.com/getting-started.html)中提到选择使用注解和xml文件的情况：
+
+> 对于像 BlogMapper 这样的映射器类来说，还有另一种方法来完成语句映射。 它们映射的语句可以不用 XML 来配置，而可以使用 Java 注解来配置。比如，上面的 XML 示例可以被替换成如下的配置：
+>
+> ```
+> package org.mybatis.example;
+> public interface BlogMapper {
+>   @Select("SELECT * FROM blog WHERE id = #{id}")
+>   Blog selectBlog(int id);
+> }
+> ```
+>
+> 使用注解来映射简单语句会使代码显得更加简洁，但对于稍微复杂一点的语句，Java 注解不仅力不从心，还会让本就复杂的 SQL 语句更加混乱不堪。 因此，如果你需要做一些很复杂的操作，最好用 XML 来映射语句。选择何种方式来配置映射，以及是否应该要统一映射语句定义的形式，完全取决于你和你的团队。换句话说，永远不要拘泥于一种方式，你可以很轻松地在基于注解和XML 的语句映射方式间自由移植和切换。
+
+总而言之，如果需求简单，选注解；需求复杂，选xml映射文件。
+
+
+
+## Springboot的配置文件
+
+之前学习的这个配置文件全部都写在了`application.properties`中,然后在这个文件中的格式都是以键值对来定义的，但是会让代码变得臃肿。。。感觉还好吧，但是由于大佬们喜欢简化，不想多干一点重复工作，就又设计了两种配置文件，后缀为：
+
+`.yaml`，`yml`，现在用的比较多的是yml配置文件，对比如下：
+
+`application.properties`:
+
+```properties
+spring.application.name=springboot-mybatis-quickstart
+#配置数据库连接信息
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.url=jdbc:mysql://localhost:3306/web01
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.username=root
+spring.datasource.password=1234
+#配置mybatis的日志输出
+mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdoutImpl#指定XML映射配置文件的位置
+
+```
+
+`application.yml`:
+
+```yml
+spring:
+  datasource:
+	driver-class-name: com.mysql.jdbc.Driver
+	url: jdbc:mysql://localhost:3306/webo1
+	username: root
+	password: 1234
+```
+
+采用了缩进的方式来显示层级关系
+
+具体格式如下:
+
+* **数据前面必须有空格，作为分隔符，否则会报错**
+
+* **不能使用Tab键来缩进，必须使用空格，但是在IDEA中，会自动将Tab识别为空格**
+* **缩进的空格数目不重要，只要相同层级的元素左侧对齐即可**
+
+```yml
+#定义对象、Map集合
+user:
+  name: 张三
+  age: 19
+  password: 123456
+  
+  
+#定义数组、List、Set
+hobby: 
+  - java
+  - game
+  - sport
+```
+
+<img src="./images/image-20260413202333873.png" alt="image-20260413202333873" style="zoom:67%;" />
