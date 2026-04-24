@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class LC_004_FindMedianSortArray {
     public static void main(String[] args) {
         int[] nums1 = {1, 2, 3, 4, 5, 6};

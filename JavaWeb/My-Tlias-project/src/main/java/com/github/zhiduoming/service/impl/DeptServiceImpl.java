@@ -1,6 +1,6 @@
 package com.github.zhiduoming.service.impl;
 
-import com.github.zhiduoming.Mapper.DeptMapper;
+import com.github.zhiduoming.mapper.DeptMapper;
 import com.github.zhiduoming.pojo.Dept;
 import com.github.zhiduoming.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;

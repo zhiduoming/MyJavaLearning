@@ -1,4 +1,4 @@
-package com.github.zhiduoming.Mapper;
+package com.github.zhiduoming.mapper;
 
 import com.github.zhiduoming.pojo.User;
 import org.apache.ibatis.annotations.*;

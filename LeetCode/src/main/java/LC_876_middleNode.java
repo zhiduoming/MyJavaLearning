@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class LC_876_middleNode {
 
     public static void main(String[] args) {

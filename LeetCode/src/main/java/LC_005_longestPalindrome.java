@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class LC_005_longestPalindrome {
     public static void main(String[] args) {
         String s = "bacbcbcad";

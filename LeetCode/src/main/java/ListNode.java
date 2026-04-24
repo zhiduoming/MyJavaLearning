@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class ListNode {
     int val;
     ListNode next;

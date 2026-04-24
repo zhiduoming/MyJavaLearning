@@ -1,6 +1,3 @@
-package leetcode.day_01;
-
-
 public class LC_021_mergeTwoLists {
     public static void main(String[] args) {
         int[] arr1={1,2,4};

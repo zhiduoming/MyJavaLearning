@@ -6,9 +6,17 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 2006051Chenyibo?
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
 
 #配置日志输出
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+#配置事务管理日志级别
+logging:
+  level:
+    org.springframework.jdbc.support.JdbcTransactionManager: debug

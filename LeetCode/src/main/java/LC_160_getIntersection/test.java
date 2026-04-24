@@ -1,4 +1,4 @@
-package leetcode.day_01.LC_160_getIntersection;
+package LC_160_getIntersection;
 
 import java.util.HashSet;
 

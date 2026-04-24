@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class LC_209_minSubArrayLen {
     public static void main(String[] args) {
         int[] nums={1,1,1,1,1,1,1,1};

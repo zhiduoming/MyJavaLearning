@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class LC_002_addTwoNumbers {
     public static void main(String[] args) {
 

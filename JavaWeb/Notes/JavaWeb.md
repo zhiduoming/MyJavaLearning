@@ -680,7 +680,7 @@ public void DeleteById(Interger id);
 
 * 我定义的xml的映射文件的名称要与Mapper这个接口的名称相同，比如我的Mapper接口叫`UserMapper`，那么我的xml文件就要命名为：`UserMapper.xml`
 
-* xml映射文件中有个`namespace`属性，然后要让这个属性值和我的**Mapper接口的全限定名**保持一致，例如，我的包名叫做`com.github.zhiduoming.Mapper`，那么这个全限定名就为`com.github.zhiduoming.Mapper.UserMapper`
+* xml映射文件中有个`namespace`属性，然后要让这个属性值和我的**Mapper接口的全限定名**保持一致，例如，我的包名叫做`com.github.zhiduoming.mapper`，那么这个全限定名就为`com.github.zhiduoming.mapper.UserMapper`
 
 * xml映射文件中sql语句中的id要与Mapper接口中的方法名保持一致，并保持返回类型一致。例如：
 
@@ -805,4 +805,324 @@ hobby:
 Restful风格是一种风格，不是规范也不是规定，可以打破
 
 描述功能模块通常使用复数形式（加s），表示此类资源，而非单个资源。如：users，books······
+
+
+
+**PageHelper插件**
+
+可以使用`PageHelper`插件来实现分页操作，首先要在`pom.xml`文件中引入相关依赖：
+
+```xml
+  		<dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter-test</artifactId>
+            <version>4.0.1</version>
+            <scope>test</scope>
+        </dependency>
+```
+
+然后在Mapper层里面定义对应的SQL，在定义的时候就不用考虑LIMIT关键字了，`PageHelper`会自动分页，同时实现查询总行数和查询信息的操作（要注意不能在SQL语句的末尾添加`;`,因为`PageHelper`会自动拼接一个分号`;`）
+
+在`service`层里面调用这个方法时，需要注意`startPage（page，size）`这个方法必须要紧跟后面那个查询方法，如果中间加了其他的逻辑，就可能导致分页参数失效或者应用到错误的查询上。
+
+在调用对应的查询方法后，将其封装在`PageInfo`对象中，例如：
+
+```java
+public PageResult<University> getUniversityList(int page, int size) {
+    // 1. 设置分页参数（必须在查询语句紧邻的上方！）
+    PageHelper.startPage(page, size);
+
+    // 2. 执行查询（Mapper 就是最普通的查询全量 SQL）
+    List<University> list = universityMapper.selectAll();
+
+    // 3. 强转并封装返回体
+    PageInfo<University> pageInfo = new PageInfo<>(list);
+    return new PageResult<>(pageInfo.getTotal(), pageInfo.getList());
+}
+```
+
+将刚刚查到的`list`封装到这个`PageInfo`中，然后`PageInfo`会自动计算好`total`（总记录数）,  `pages(总页数)`等关键信息，然后在返回的时候使用这个自己定义的`PageResult`进行封装，将`PageInfo`里面的信息（例如总记录数，已经那个List表）全部交给`PageResult`对象，最后在Controller层将PageResult对象作为参数传递给`Result`对象。
+
+> 关于`PageHelper`
+>
+> 很多新手觉得 `new PageInfo<>(list)` 只是个简单的包装，**大错特错！** 它是 PageHelper 框架完成“狸猫换太子”的最后一步。
+>
+> ### 1. 核心本质：那个 `list` 到底是什么？
+>
+> 你以为 `universityMapper.selectAll()` 返回的是 `java.util.ArrayList`？ **并不是。** **PageHelper 通过 MyBatis 拦截器，在运行期将返回结果强转成了 `com.github.pagehelper.Page` 类。**
+>
+> * `Page` 类继承了 `ArrayList`，所以你可以用 `List` 接收。
+> * 但 `Page` 类比 `ArrayList` 多了几个私有属性：`total`（总行数）、`pages`（总页数）、`pageNum`（当前页）等。
+>
+> ### 2. `PageInfo` 构造函数的黑盒操作
+>
+> 当你执行 `new PageInfo<>(list)` 时，源码里发生了这两件事：
+>
+> * **类型检查**：它会判断你传进来的 `list` 是不是 `instanceof Page`。
+> * **属性克隆**：如果是，它就利用反射或者直接调用，把 `list` 里的 `total`、`pageSize` 等分页元数据，**拷贝**到 `PageInfo` 对象里。
+> * **二次计算**：它会根据这些数据，帮你算出 `isFirstPage`、`hasNextPage` 以及前端最需要的 `MapspageNums`（分页条码，如 [1, 2, 3, 4, 5]）。
+>
+> ### 3. 为什么不直接返回 list？
+>
+> 如果你直接把 `list` 返回给前端：
+>
+> 1. **数据丢失**：JSON 序列化时，只会序列化 List 里的数据元素，`Page` 类里那些额外的 `total` 属性会丢失。前端拿不到总页数，没法画分页条。
+> 2. **不规范**：大厂严禁直接将持久层对象（DAO/Entity）扔给前端。
+>
+> ### 4. 致命雷区：Stream 流转换（必考）
+>
+> 这是小陈你最容易踩的坑，给我听好了： **如果你在 Mapper 查询和 PageInfo 之间加了 Stream 处理，分页必断！**
+>
+> Java
+>
+> ```
+> // 错误示范
+> List<User> list = userMapper.selectAll(); // 此时 list 是 Page 类型，有 total
+> List<UserDTO> dtoList = list.stream().map(UserDTO::new).toList(); // 此时 dtoList 变成了普通的 ArrayList！total 丢了！
+> PageInfo<UserDTO> pageInfo = new PageInfo<>(dtoList); // 这里的 pageInfo.getTotal() 将等于当前页的数量（比如10），而不是数据库总数（比如1000）
+> ```
+>
+> **正确做法**：先封装 `PageInfo`，或者手动把 `list`（Page类型）里的 `total` 强行塞给新的 `PageInfo`。
+
+所以查询的结果被 `PageHelper`使用 `Mybatis`拦截器在运行期间将返回结果强转成了 `com.github.pagehelper.Page` 类。而这个`Page`类型继承了`ArrayList`，`ArrayList`又继承了`List`因此使用`List`类型的对象来接收。
+
+
+
+
+
+**条件分页查询**
+
+​	在Controller层接收日期时间等参数时，由于传递的参数格式可能不统一，所以可以利用`@DataTimeFormat(pattern="")`来指定日期或者时间的格式
+
+​	在拼接参数时，引号`''`内不能有`#{...}`，这样会使代码在编译的过程当中用`?`去替换掉`#{...}`这个整体，导致占位符与参数的数量不匹配然后报错。
+
+​	在Mappper层如果查询的SQL语句太长，则可以取消`@Select`的注解（其他类型SQL也可），然后将其配置在xml映射文件当中。
+
+
+
+**Mybatis动态SQL**
+
+当SQL语句是不固定的，是随着用户的输入或者外部条件的变化而变化的时候，就要使用动态SQL，即用<if>...</if>将条件进行包裹，如果<if test="...">中的条件成立，则拼接该SQL，如果不成立，则不拼接。
+
+<where>...</where>标签一般要搭配使用，可以替换掉`where`关键字，里面包裹着所有条件。
+
+
+
+ **主键返回**
+
+使用`@Options`注解设置`@Options(useGeneratedKeys = true,keyProperty = "id",keyColumn="id")`，可以在执行这个方法之后将主键返回到id
+
+> **参数详解：**
+>
+> 1. **useGeneratedKeys = true**:
+>    •	**核心指令**。告诉 MyBatis 调用 JDBC 驱动的 `getGeneratedKeys` 方法来获取数据库内部生成的 ID。
+> 2. **keyProperty = "id"**:
+>    •	**回填目标**。指定将获取到的主键值设置到传入参数（即 `User` 对象）的哪个属性（Property）中。
+> 3. **keyColumn = "id"（可选）**:
+>    •	**数据库列名**。指定数据库表中主键列的名字。在大多数情况下（如 MySQL），框架能自动识别，但在某些复杂数据库（如 Oracle）或多主键情况下，必须明确指定。
+
+
+
+**请求参数接收优化**
+
+如果请求路径参数很多，导致`controller`方法的参数很多， 就可以将路径参数直接封装到一个对象当中，方法直接传递这个对象即可。
+
+`@ModelAttribute`注解可以把路径参数自动封装到后面传递的对象当中，前提是后面这个对象必须要提前定义好路径参数及其get和set方法。
+
+
+
+**事务控制**
+
+在 spring 中提供了事务管理的注解`@Transactional`，在方法，类，接口上都可以加上该注解，一旦加上这个注解，就自动增加了事务管理功能，建议加到方法上，而且是频繁对数据库进行增删改操作的方法上。
+
+在`@Transactional`这个注解中，可以加上 rollbackfor来指定什么样的异常会回滚，rollbackfor 是一个数组，可以将想要回滚的异常添加到这个数组当中
+
+<img src="./images/image-20260424162734702.png" alt="image-20260424162734702" style="zoom: 67%;" />
+
+还可以指定**事务的传播行为**：即一个事务方法被另一个事务方法调用的时候，这个事务需要如何进行控制，是加入到当前的这个事务还是新建一个事务，可以指定 propagation 的值，其有很多的值，只需要重点掌握两个值
+
+> **① REQUIRED (默认级别)**
+>
+> - **语义：** 如果当前有事务，就加入；如果没有，就新建。
+> - **场景：** 绝大多数业务逻辑。
+> - **后果：** 只要其中一个方法报错，整个链路全部回滚。
+>
+> **② REQUIRES_NEW**
+>
+> - **语义：** 无论当前是否有事务，都会开启一个全新的事务。如果当前存在事务，则将其**挂起（Suspend）**。
+> - **场景：** **记录日志**。
+> - **关键点：** 即使外部业务事务回滚，`REQUIRES_NEW` 的事务只要执行成功并提交，就不会受影响。它拥有独立的生命周期。
+
+## Linux系统
+
+Linux免费使用，自由传播，
+
+<img src="./images/image-20260415115402821.png" alt="image-20260415115402821" style="zoom:50%;" />
+
+
+
+### 目录操作命令
+
+#### 1. `ls [-al] [dir]` 命令
+
+作用：显示指定目录下的内容
+
+`-a`表示显示所有文件和目录，同时将隐藏的文件或者目录也会列出来，隐藏的文件或目录一般都是以`.`开头的。
+
+`-l`选项表示除了将文件名称列出来，还会列出文件类型（d表示目录，-表示文件），上操作时间，权限，拥有者等等，如果要详细列出就选择`-l`选项
+
+`ll`命令可以详细列出所有详细的目录和文件，包括隐藏的，而且书写简单，是系统内置的一个别名，相当于
+
+```bash
+chen@VM-0-7-ubuntu:~$ ll
+total 24
+drwxr-x--- 2 chen chen 4096 Apr 15 13:56 ./
+drwxr-xr-x 5 root root 4096 Apr 15 13:20 ../
+-rw------- 1 chen chen  422 Apr 15 13:56 .bash_history
+-rw-r--r-- 1 chen chen  220 Apr 15 13:20 .bash_logout
+-rw-r--r-- 1 chen chen 3771 Apr 15 13:20 .bashrc
+-rw-r--r-- 1 chen chen  807 Apr 15 13:20 .profile
+chen@VM-0-7-ubuntu:~$
+```
+
+`ls -alF`,可以使用 `alias `来临时创建一个别名或者来查看一个命令当前已经设置好的别名
+
+比如使用`alias ll`命令来获得输出`alias ll='ls -alF'`
+
+#### 2.`mkdir [-p] dirName`
+
+作用：创建一个目录
+
+`-p`: 确保目录存在，如果不存在的话就会创建一个，如果不加这个选项，就不能创建多级目录（因为父目录还没有创建，所有子目录也创建不了）
+
+#### 3.`cd [dirName]`
+
+`.`: 表示目录当前所在的目录
+
+`..`:表示当前目录的上一级目录
+
+`~`: 表示用户的home目录
+
+`/`：表示Linux的根目录
+
+例如：
+
+```bash
+cd ..			#切换到上一级目录
+cd .			#切换到当前目录
+cd ~     		#切换到用户的home目录
+cd /usr/local   #切换到/usr/local目录
+cd - 			#切换到上一次所在的目录
+```
+
+#### 4.`rm [-rf] name`
+
+作用：删除目录或者文件
+
+`-r`:  表示将当前目录及其目录中的所有文件都逐一删除，即递归删除
+
+`-f`：表示将当前目录不经过确认，直接删除
+
+`-ri`：表示将当前目录下的所有文件都逐一删除，且要经过逐一确认
+
+
+
+### 文件操作命令
+
+#### 1.`cat [-n] fileName`
+
+作用：查看文件内容
+
+`-n`:表示查看文件的同时显示行号，适合查看一些小文件，大文件会刷屏，不适合查看。
+
+
+
+#### 2.`more fileName`
+
+作用：分页查看文件内容
+
+可以查看一些比较大的文件，在查看的时候按`B`可以看上一页的内容，按空格可以查看下一页的信息，按回车可以逐行查看信息
+
+如果要退出，则可以按`q`或者`Ctrl+C`退出。
+
+
+
+#### 3.`head [-n] fileName`
+
+作用：查看文件的前几行信息
+
+`-n`:加上-n之后表示要查看文件头部的n行信息，不加默认输出10行
+
+
+
+#### 4.`tail [-nf] fileName`
+
+作用：查看文件尾部的后几行信息
+
+`-n`：查看文件尾部的后n行信息
+
+`-f`:  用于动态地查看文件尾部实时追加的信息（多用于查看日志文件）
+
+
+
+### 拷贝移动命令
+
+#### 1.`cp [-r] source dest`
+
+作用:  将`source` 拷贝到 `dest`
+
+`-r`:表示要拷贝的`source`是目录时（非文件时使用）
+
+拷贝的目的地`dest`可以是新文件名，也可以是目录名
+
+#### 2. `mv source dest`
+
+作用：将`source`移动到`dest`或者重命名
+
+重命名：当dest是一个当前目录下不存在的文件或者目录时，就是重命名
+
+移动：当dest是一个当前目录下已存在的目录时，就是移动到这个目录下。
+
+
+
+### 打包和压缩命令
+
+#### `tar [-zxcvf] fileName [files]`
+
+作用：对文件进行打包、解包、压缩、解压
+
+包文件后缀为`.tar`表示只是完成了打包，并没有压缩
+
+包文件后缀为`.tar·gz`表示打包的同时还进行了压缩
+
+* -z：z代表的是gzip，通过gzip命令处理文件，gzip可以对文件压缩或者解压
+* -c：c代表的是create，即创建新的包文件（打包）
+* -x：x代表的是extract，实现从包文件中还原文件(解包)
+* -v：v代表的是verbose，显示命令的执行过程
+* -f：f代表的是file，用于指定包文件的名称
+
+其中`-x`和`-c`命令互斥，不能同时使用
+
+### 查找命令
+
+`grep [inAB] word fileName`
+
+作用：从指定文件中查找指定的文本内容（根据word关键字）
+
+* `-i`检索的关键字忽略（ignore）大小写，可以查java，也能查Java
+* `-n`显示关键字所在这一行的行号
+* `-A`输出关键字所在行及之后（After）的几行记录（-A5 表示输出关键字所在行后面的5行内容）
+* `-B`输出关键字所在行及之前（Before）的几行记录（-B5表示输出关键字所在行前面的5行内容）
+
+例如：
+
+![image-20260415173218855](./images/image-20260415173218855.png)
+
+其中后面的文件也可以支持模糊查询，比如`HelloWorld.java`文件可以写成`*.java`这样就可以支持在所有java文件中寻找该`public`关键字了
+
+
+
+`find dirname -option fileName`
+
+例如:  `find . -name "*.log"`就可以查询当前目录下的所有.log结尾的日志文件
 

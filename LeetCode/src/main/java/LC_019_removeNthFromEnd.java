@@ -1,5 +1,3 @@
-package leetcode.day_01;
-
 public class LC_019_removeNthFromEnd {
     public static void main(String[] args) {
 

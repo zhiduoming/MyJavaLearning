@@ -1,6 +1,3 @@
-package leetcode.day_01;
-
-
 import java.util.Arrays;
 import java.util.HashMap;
 

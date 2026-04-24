@@ -844,3 +844,102 @@ os: MySQL基础完结，后面进军JDBC和Mybatis，忘东西忘得有点快，
 * Mybatis的CRUD
 * Mybatis的配置文件，xml映射文件
 * Springboot配置文件（`.properties`,`.yml`,`.yaml`）
+
+
+
+## 2026.4.14 打卡 Day24
+
+1.JavaWeb
+
+* Tlias 项目准备工作
+* 部门管理实现
+* APIfox 与 nginx 环境搭建
+* 日志技术，引入 slf4j
+
+## 2026.4.15 打卡 Day25
+
+1.JavaWeb
+
+* 员工管理实现
+* 分页查询实现
+
+2.intelligent-university-visit-system（IUVS） 项目
+
+* 初始框架搭建
+* 数据库建表与数据注入
+
+
+
+## 2026.4.16 打卡 Day26
+
+1.IUVS 项目
+
+* 基本 university 查询实现
+* 基本 Campus 查询实现
+* 基本 poi 查询实现
+
+
+
+## 2026.4.17 打卡 Day27
+
+1.IUVS 项目
+
+* 完成university 分页查询（PageHelper）
+
+2.Linux 基础操作
+
+
+
+## 2026.4.24 打卡 Day28
+
+1.Leetcode 刷题
+
+* 206.反转链表，（迭代，通过 pre 和 temp 来将链表每个节点的指向进行反转）
+
+```java
+        public ListNode reverseList(ListNode head) {
+            ListNode pre = null;
+            ListNode cur = head;
+            while (cur != null) {
+                //保存当前节点的下一个节点
+                ListNode temp = cur.next;
+                //将节点指向改变
+                cur.next = pre;
+                //更新 pre
+                pre = cur;
+                //更新 cur
+                cur = temp;
+            }
+            return pre;
+        }
+```
+
+
+
+* 1.两数之和复习
+
+重温 hashmap 基础操作
+
+```java
+public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                return new int[]{map.get(target - nums[i]), i};
+            }
+            map.put(nums[i], i);
+        }
+        return new int[0];
+    }
+```
+
+
+
+2.JavaWeb
+
+完成了新增员工，新增员工经历部分
+
+实现文件上传功能
+
+熟悉阿里云 oss的使用
+
