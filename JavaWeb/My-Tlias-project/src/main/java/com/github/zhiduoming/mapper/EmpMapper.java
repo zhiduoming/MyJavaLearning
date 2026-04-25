@@ -5,6 +5,7 @@ import com.github.zhiduoming.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,12 @@ public interface EmpMapper {
             "(#{username},#{password},#{name},#{gender},#{phone},#{job},#{salary}," +
             "#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})")
     void insert(Emp emp);
+
+    void deleteByIds(@Param("ids") List<Integer> ids);
+
+    Emp getById(Integer id);
+
+    void update(Emp emp);
+
+    Emp getByUsernameAndPassword(Emp emp);
 }

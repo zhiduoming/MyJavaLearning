@@ -11,4 +11,24 @@
             (#{expr.empId},#{expr.begin},#{expr.end},#{expr.company},#{expr.job})
         </foreach>
     </insert>
+
+    <delete id="deleteByEmpIds">
+        DELETE FROM emp_expr WHERE emp_id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据员工 id 查询员工经历信息-->
+    <select id="getByEmpId" resultType="com.github.zhiduoming.pojo.EmpExpr">
+        SELECT *
+        FROM emp_expr
+        WHERE emp_id = #{empId}
+        ORDER BY begin
+    </select>
+
+    <!--根据员工 id 删除员工经历信息-->
+    <delete id="deleteByEmpId">
+        DELETE FROM emp_expr WHERE emp_id = #{empId}
+    </delete>
 </mapper>

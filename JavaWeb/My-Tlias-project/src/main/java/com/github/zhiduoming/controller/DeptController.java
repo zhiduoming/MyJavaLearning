@@ -4,7 +4,6 @@ import com.github.zhiduoming.pojo.Dept;
 import com.github.zhiduoming.pojo.Result;
 import com.github.zhiduoming.service.DeptService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,8 +13,12 @@ import java.util.List;
 @RestController
 public class DeptController {
 
-    @Autowired
-    private DeptService deptService;
+    private final DeptService deptService;
+
+    public DeptController(DeptService deptService) {
+        this.deptService = deptService;
+    }
+
     @GetMapping
     public Result list(){
         log.info("查询全部的部门数据");
