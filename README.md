@@ -1050,3 +1050,73 @@ public int[] twoSum(int[] nums, int target) {
 * 重新部署到服务器
 
 2.简历初版完成
+
+## 2026.5.7 打卡 Day38
+
+1.MySQL进阶
+
+* MySQL 的体系结构
+* 常见的存储引擎
+* InnoDB 和 MyISAM 引擎的对比与选择
+* 索引（至 SQL 性能分析）
+
+2.leetcode 刷题
+
+* 111.二叉树的最小深度（使用层序遍历 queue 和 size ）
+
+  ```java
+  public int minDepth(TreeNode root) {
+  
+      if (root == null) return 0;
+    
+      Queue<TreeNode> queue = new LinkedList<>();
+      queue.offer(root);
+      int depth = 1;
+  
+      while (!queue.isEmpty()) {
+          int size = queue.size();
+          for (int i = 0; i < size; i++) {
+              TreeNode node = queue.poll();
+              if (node.left == null && node.right == null) {
+                  return depth;
+              }
+              if (node.left != null) {
+                  queue.offer(node.left);
+              }
+              if (node.right != null) {
+                  queue.offer(node.right);
+              }
+          }
+          depth++;
+      }
+      return depth;
+  }
+  ```
+
+  
+
+* 256.树的所有路径(可以使用 StringBuilder 进行优化，要注意对 sb 进行回溯)
+
+  ```java
+  private void dfs(TreeNode root, StringBuilder sb, List<String> ans) {
+          int length = sb.length();
+          sb.append(root.val);
+          if (root.left == null && root.right == null) {
+              ans.add(sb.toString());
+              sb.setLength(length);
+              return;
+          }
+  
+          sb.append("->");
+          if (root.left != null) {
+  
+              dfs(root.left, sb, ans);
+          }
+          if (root.right != null) {
+              dfs(root.right, sb, ans);
+          }
+          sb.setLength(length);
+      }
+  ```
+
+  
