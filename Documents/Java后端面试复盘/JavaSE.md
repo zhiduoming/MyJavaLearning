@@ -14,13 +14,33 @@
 
 ### 怎样理解多态？
 
-多态是 Java 面向对象的一个重要特性，一种对象拥有不同的状态，表现为父类引用指向子类实例
+多态是 Java 面向对象的一个重要特性，一种对象拥有不同的状态，表现为父类引用指向子类实例。
 
-多态通常要求：具有继承或接口实现的关系、子类重写父类的方法，父类引用指向子类实例
+多态通常要求：具有继承或接口实现的关系、子类重写父类的方法，父类引用指向子类实例。
 
-好处是可以提高代码的扩展性，降低耦合、让程序面向接口或父类编程
+好处是可以提高代码的扩展性，降低耦合、让程序面向接口或父类编程。
+
+### int 和 Integer 有什么区别？
+
+int 是基本类型，Integer 是 int 的包装类，属于引用类型。作为成员变量时，int 默认值是 0，Integer 默认值是 null。
+
+Integer 可以用于集合和泛型，也可以调用方法，而 int 不行。
+
+二者之间有自动装箱和自动拆箱，自动装箱是把 int 转成 Integer，自动拆箱是把 Integer 转成 int。如果 Integer 为 null 时发生自动拆箱，会抛出 NullPointerException。
+
+比较时，int 可以用 == 比较数值；Integer 如果两个对象之间用 == 比较，比较的是引用地址，所以一般应该用 equals 或 Objects.equals 比较值。
+
+Integer 还有缓存机制，自动装箱或 Integer.valueOf 时，默认会缓存 -128 到 127 范围内的对象，所以这个范围内的两个 Integer 用 == 比较可能为 true，超过这个范围通常为 false，但开发中不应该依赖 == 比较 Integer 的数值。
 
 
+
+### 什么是 Integer 缓存池？
+
+`Integer` 缓存池是 `Integer` 类内部的一种缓存机制。默认会缓存 `-128` 到 `127` 范围内的 `Integer` 对象。
+ 当发生自动装箱时，比如 `Integer a = 127`，底层会调用 `Integer.valueOf(127)`。如果数值在缓存范围内，就会直接返回缓存中的对象，而不是创建新对象。
+ 所以 `Integer a = 127; Integer b = 127; a == b` 通常是 `true`，因为它们引用的是同一个缓存对象。
+ 但如果是 `Integer a = 128; Integer b = 128;`，超出了默认缓存范围，通常会创建不同对象，所以用 `==` 比较是 `false`。
+ 因此包装类比较数值时不建议用 `==`，应该使用 `equals()` 或 `Objects.equals()`。
 
 
 
@@ -30,6 +50,16 @@
 如果字段是基本类型，复制的是具体值；如果字段是引用类型，复制的是引用地址，所以新旧对象会指向同一个内部对象，即复制基本类型，共用引用类型。
 
 深拷贝：深拷贝也会在堆上创建一个新对象，但它会将原对象内部引用的其他对象也复制一份，不再和原对象共享一个引用对象，修改其中一个对象中的引用字段，一般不会影响另一个对象
+
+
+
+### 什么是方法重载和方法重写？
+
+方法重载是指在同一个类中，方法名相同但是参数列表不同，参数列表不同是指参数个数不同，参数类型不同和参数顺序不同，与返回值类型无关，返回值类型不同不构成方法的重载
+
+而方法的重写是发生在父类和子类之间的，子类重新实现父类中的方法，重写要求方法名一样，参数列表相同，返回值类型相同或者是父类返回值的子类，而且子类方法的访问权限不能比父类更加严格，父类中被 final 和 private 修饰的方法不能被重写。
+
+方法重载是编译时多态，而方法重写是运行时多态。
 
 
 
@@ -167,6 +197,8 @@ HashMap 底层是**数组 + 链表 + 红黑树**。
 红黑树用于优化长链表查询性能。
 树化条件：链表长度 >= 8 且数组容量 >= 64。
 
+
+
 ### HashMap put 流程大概是什么？
 
 HashMap 在 put 时，首先会根据 key 计算 hash 值。在 JDK 8 中，会先调用 key 的 hashCode 方法，然后将 hashCode 的高 16 位和低 16 位进行异或扰动，尽量让高位也参与下标计算，从而减少哈希冲突。
@@ -245,23 +277,85 @@ ConcurrentHashMap 锁粒度更细为桶级别，性能比 Hashtable 好。
 
 ### HashSet 底层是什么？
 
+HashSet 的底层是 HashMap，在 HashSet 底层维护了一个 HashMap，当我们往 HashSet 中添加元素时，会将元素当做 HashMap 的 key 存储，而 value 是一个固定的 Object 占位对象。
+
+因为 HashMap 中的 key 不能重复，所以 HashSet 不能存储重复元素。在 HashSet 中主要依赖元素的 hashCode（）方法和 equals（）方法判断元素是否重复，首先根据 hashCode（）定位元素的存储位置，然后再根据 equals（）方法精确判断元素是否相等。
+
+如果我们在 HashSet中存放自定义对象，并且希望根据元素的内容进行去重的时候，需要同时重写 equals（）和 hashCode（）方法。
+
 
 
 ### Collection 和 Map 的区别？
 
+Colletion 和 Map 是 Java 集合体系的两个顶层接口。
 
+Collection 是单列集合，一般用来存放一个个独立的元素，其实现类主要有 List，Set，Queue。List 的特点是有序可重复，Set 的特点是无序不可重复，而 Queue 一般用来表示队列结构。
+
+Map 是双列集合，用来保存 key-value 键值对，一个 key 对应一个 value，且 key 不可重复，常见实现类有 HashMap，TreeMap，ConcurrentHashMap 。
+
+Collection 适合保存一组对象，而 HashMap 适合根据 key 快速查找对应的 value。
 
 ## 异常机制
 
 ### Exception 和 Error 区别？
 
+在 Java 中所有异常和错误的顶层父类是 Throwable 类，Throwable 类下面主要有两个子类 Error 和 Exception。
+
+Error 主要表示系统级严重错误，比如 OutOfMemoryError，StackOverflowError，这类问题主要是 JVM 和资源层面的问题，程序一般无法处理，也不建议使用 try-catch 捕获
+
+Exception 主要表示程序运行中可以预料可以处理的异常，比如 IOException，SQLException，NullPointerException 等，通常可以使用 try-catch、throws、全局异常处理机制进行处理。
+
+所以 Error 主要偏向于系统级严重错误，而 Exception 主要偏向程序级异常，是我们日常开发中重点关注和处理的对象。
+
 ### Checked Exception 和 Unchecked Exception 区别？
+
+Checked Exception 和 Unchecked Exception 的主要区别是编译器是否强制处理
+
+Checked Exception 也叫受检异常，主要是 Exception 中除了 RuntimeException 及其子类之外的异常，比如 IOException、SQLException、ClassNotFoundException 等。编译器要求我们要强制处理，要么使用 try-catch 捕获异常，要么使用 throws 向上抛出。
+
+Unchecked Exception 也叫非受检异常，主要是 RuntimeException 及其子类，广义上也包括 Error，比如 NullPointerException，ArrayIndexOutOfBoundsException 等，编译器不要求我们强制处理，这些问题往往都是代码逻辑的问题，可以通过参数校验、边界判断、代码修复等措施避免。
+
+受检异常更偏向于外部资源、外部环境、类加载等不可完全由程序控制的问题，编译器需要强制处理，而非受检异常更偏向代码层面的问题，通常不建议到处捕获，而应该从代码层面避免。
+
+（运行时异常并不是只有在运行时才会发生，所有异常本质上都是在运行时发生的，运行时异常是指 RuntimeException 这一类，编译器不需要显式处理）
 
 ### throw 和 throws 区别？
 
+throw 和 throws 都和异常处理有关，但是使用位置和作用不同。
+
+throw 使用在方法内部，后面跟的是一个具体的异常对象，表示主动抛出一个异常。比如 throw new RuntimeException（”参数错误“）。一旦执行，则当前方法后面的代码就不会再执行，异常会向上抛给调用者。
+
+throws 使用在方法声明上，后面跟的是一种或多种异常类型，表示这个方法可能会抛出这些异常，不一定真的会抛出，当前方法不处理，交给调用者处理，调用者可以使用 try-catch 捕获，也可以继续向上抛出。
+
+throw 是真正抛出异常，而 throws 只是声明可能会抛出异常。对于受检异常一旦使用 throw 进行抛出但没有进行捕获，那么方法签名上必须使用 throws 进行声明，但是对于 RuntimeException ，编译器不要求强制处理。
+
 ### try-catch-finally 执行顺序？
 
+顺序是先执行 try，如果 try 中没有发生异常，则会跳过 catch，直接执行 finally
+
+如果 try 中发生了异常，会跳过发生异常之后的代码寻找匹配的 catch，如果匹配到了对应的catch，则会执行 catch，最后执行 finally，但如果没有匹配到对应的catch，则会跳过 catch 直接执行 finally，然后异常继续向上抛出。
+
+如果 try 和 catch 中有 return ，则finally 中的代码会在return 前执行，如果 finally 中也有 return 的话，finally 中的 return 会覆盖 try 和 catch 中的 return，所以我们一般不建议在 finally 中 写return。
+
 ### finally 一定会执行吗？
+
+finally 通常会执行，但不是绝对一定执行。
+
+通常无论 try 中是否发生异常，catch 是否捕获到异常，甚至 try 和 catch 中有 return，finally 都会在方法真正结束前执行。
+
+但是如果JVM 被直接终止，比如System.exit(0)，或者 JVM 崩溃、系统断电、线程被直接终止还有try 或者 catch 中出现死循环，那么 finally 就没有机会执行。
+
+所以只要程序能正常走出 try-catch 模块，finally 就会执行，但如果 JVM 或者线程执行环境被直接终止，则 finally 就不会执行。
+
+### return 和 finally 同时出现怎么执行？
+
+如果return 出现在 try 和 catch 中，那么程序会先计算并暂存这个返回值，然后执行 finally，最后再真正返回。
+
+如果 finally 中没有return，一般不会改变已经暂存好的基本类型返回值；但如果返回类型是引用类型 finally 中修改了对象内部状态，那么最终返回的对象内容可能会受到影响。
+
+如果 finally 中有return，那么 finally 中的return 会覆盖掉 try 和 catch 中的return 返回值，如果 finally 中抛出了异常，也会覆盖原本准备返回的结果。
+
+所以在实际开发中，不建议在 finally 中使用 return 或者抛出新的异常，这样会造成代码混乱，甚至吞掉原来的异常或者返回值。
 
 ## 泛型
 
@@ -277,9 +371,15 @@ ConcurrentHashMap 锁粒度更细为桶级别，性能比 Hashtable 好。
 
 ### 反射是什么？
 
+
+
 ### 反射可以做什么？
 
+
+
 ### 反射的缺点？
+
+
 
 ## 注解
 

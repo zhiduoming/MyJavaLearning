@@ -1,9 +1,13 @@
 package Oop;
 
 public class Test {
-    static void main() {
-        String name = "zhangsan";
-        int i = name.hashCode();
-        Object
+    public static void main(String[] args) {
+        try {
+
+        }catch (ArithmeticException e){
+            throw new ArithmeticException("算数异常") ;
+        }finally {
+            System.out.println("finally");
+        }
     }
 }
