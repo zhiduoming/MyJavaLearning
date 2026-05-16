@@ -939,7 +939,7 @@ REVOKE ALL ON itcast.* FROM 'lisi'@'%';
 | **`CASE WHEN [k1] THEN [v1] ... ELSE [default] END`**  | **条件分支：** 满足 k1 返回 v1，以此类推 | **核心：** 相当于 `if...else if...else`。非常灵活。     |
 | **`CASE [expr] WHEN [v1] THEN [r1] ... ELSE [r] END`** | **等值分支：** 表达式等于 v1 返回 r1     | 相当于 `switch...case`。                                |
 
-## 
+
 
 ## 四、约束
 

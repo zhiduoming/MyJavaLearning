@@ -17,7 +17,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
     int[][] win ={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,0}};
     int step=0;
     Random r=new Random();
-    String path="..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\girl\\girl"+r.nextInt(1,14)+"\\";
+    String path="../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/girl/girl"+r.nextInt(1,14)+"/";
 
     JMenuItem replayJMenuItem = new JMenuItem("重新游戏");
     JMenuItem reloginJMenuItem = new JMenuItem("重新登录");
@@ -83,7 +83,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 
         if(victory()){
 
-            JLabel winjLabel =new JLabel(new ImageIcon("..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\win.png"));
+            JLabel winjLabel =new JLabel(new ImageIcon("../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/win.png"));
             winjLabel.setBounds(203,283,197,73);
             this.getContentPane().add(winjLabel);
         }
@@ -106,7 +106,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         }
 
         //添加背景图片
-        ImageIcon bg = new ImageIcon("..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\background.png");
+        ImageIcon bg = new ImageIcon("../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/background.png");
         JLabel background = new JLabel(bg);
         background.setBounds(40, 40, 508, 560);
         this.getContentPane().add(background);
@@ -183,10 +183,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
         int code = e.getKeyCode();
         if (code == 65) {
             this.getContentPane().removeAll();
-            JLabel all = new JLabel(new ImageIcon(path+"\\all.jpg"));
+            JLabel all = new JLabel(new ImageIcon(path+"/all.jpg"));
             all.setBounds(83, 134, 420, 420);
             this.getContentPane().add(all);
-            JLabel background =new JLabel(new ImageIcon("..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\background.png"));
+            JLabel background =new JLabel(new ImageIcon("../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/background.png"));
             background.setBounds(40,40,508,560);
             this.getContentPane().add(background);
 
@@ -281,7 +281,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             System.exit(0);
         }else if(e.getSource()==accountItemJMenuItem){
             JDialog jDialog=new JDialog();
-            JLabel jLabel=new JLabel(new ImageIcon("..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\weixin.jpg"));
+            JLabel jLabel=new JLabel(new ImageIcon("../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/weixin.jpg"));
             jLabel.setBounds(50,50,600,800);
             jDialog.getContentPane().add(jLabel);
             jDialog.setSize(700,900);
@@ -291,12 +291,12 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
             jDialog.setModal(true);
             jDialog.setVisible(true);
         }else if(e.getSource()==girl){
-            path="..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\girl\\girl"+r.nextInt(1,14)+"\\";
+            path="../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/girl/girl"+r.nextInt(1,14)+"/";
             initData();
             step=0;
             initImage();
         }else if(e.getSource()==animal){
-            path="..\\Java_Learning\\JavaBasic\\src\\main\\java\\ProjectUI\\image\\animal\\animal"+r.nextInt(1,9)+"\\";
+            path="../Java_Learning/JavaBasic/src/main/java/ProjectUI/image/animal/animal"+r.nextInt(1,9)+"/";
             initData();
             step=0;
             initImage();
