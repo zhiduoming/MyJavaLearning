@@ -46,19 +46,16 @@ import java.util.*;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int left =0;
-        int right=0;
+        Map<Character, Integer> map = new HashMap<>();
+        int left = 0;
         int ans = 0;
-        Set<Character> set = new HashSet<>();
-        while (right<s.length()){
-            char ch = s.charAt(right);
-            while (set.contains(ch)){
-                set.remove(s.charAt(left));
-                left++;
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            if (map.containsKey(c)) {
+                left = Math.max(left, map.get(c) + 1);
             }
-            set.add(ch);
-            ans=Math.max(ans,set.size());
-            right++;
+            map.put(c, right);
+            ans=Math.max(ans,right-left+1);
         }
         return ans;
     }
