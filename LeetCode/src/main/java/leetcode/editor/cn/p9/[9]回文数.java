@@ -56,24 +56,13 @@ import java.util.*;
 //leetcode submit region begin(Prohibit modification and deletion)
 class Solution {
     public boolean isPalindrome(int x) {
-        if (x < 0) return false;
-
-        Deque<Integer> stack = new ArrayDeque<>();
-        int n = x;
-        while (n > 0) {
-            int low = n % 10;
-            stack.add(low);
-            n /= 10;
+        if ((x < 0)||(x != 0 && x % 10 == 0)) return false;
+        int reverse = 0;
+        while (reverse < x) {
+            reverse = reverse * 10 + x % 10;
+            x /= 10;
         }
-        while (x > 0) {
-            Integer low = x % 10;
-            Integer high = stack.poll();
-            if(!low.equals(high)){
-                return false;
-            }
-            x/=10;
-        }
-        return true;
+        return x == reverse || x == reverse / 10;
     }
 }
 //leetcode submit region end(Prohibit modification and deletion)
