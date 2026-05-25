@@ -60,7 +60,7 @@
 
 **利用反射获取构造方法**：
 
-<img src="images\image-20260402102506754.png" alt="image-20260402102506754" style="zoom: 67%;" />
+<img src="images/image-20260402102506754.png" alt="image-20260402102506754" style="zoom: 67%;" />
 
 有`Declared`的方法权限更大，可以获取私有的构造方法
 
@@ -172,7 +172,7 @@ Class clazz = Class.forName("reflection.Student");
 
 利用反射获取成员方法：
 
-<img src="images\image-20260402142109885.png" alt="image-20260402142109885" style="zoom:67%;" />
+<img src="images/image-20260402142109885.png" alt="image-20260402142109885" style="zoom:67%;" />
 
 ```java
 //获取指定的单一方法
