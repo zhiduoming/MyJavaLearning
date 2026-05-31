@@ -30,7 +30,7 @@ MyBatis 主要负责持久层数据库操作。通过 Mapper 接口和 SQL 映�
 
 关键词：**传统 SSM、Spring Boot、自动配置、starter、内嵌 Tomcat、减少 XML**
 
-传统 SSM 是 Spring、Spring MVC和 MyBatis 的手动整合方式，通常需要配置 web.xml、spring.xml、springmvc.xml、mybatis-config.xml 等文件，还要手动配置数据源、SqlSessionFactory、Mapper 扫描、事务管理器和 DispatcherServlet，项目搭建和整合过程较为繁琐。
+传统 SSM 是 Spring、Spring MVC 和 MyBatis 的手动整合方式，通常需要配置 web.xml、spring.xml、springmvc.xml、mybatis-config.xml 等文件，还要手动配置数据源、SqlSessionFactory、Mapper 扫描、事务管理器和 DispatcherServlet，项目搭建和整合过程较为繁琐。
 
 Spring Boot 是基于 Spring 生态的一套快速开发框架，它不是替代 Spring，而是通过 starter、自动配置、约定大于配置的方式简化项目搭建。使用 Spring Boot 时，通常只需要引入对应starter，在 application.yml 中配置必要参数，再通过注解开发即可。
 
@@ -52,7 +52,7 @@ Spring Boot 是基于 Spring 生态的一套快速开发框架，它不是替代
 
 关键词：**starter、起步依赖、依赖整合、spring-boot-starter-web、mybatis-spring-boot-starter**
 
-Starter 是 Spring Boot 提供的一种依赖整合机制，本质上是一组依赖的集合。它把某个功能模块需要的相关依赖统一封装起来，开发者只需要引入对应的 starter，就不用手动一个个引入 jar 包，也减少了版本冲突问题。
+Starter 是 springboot 提供的一种依赖整合机制，本质上是一组依赖的集合。它把某个功能模块需要的相关依赖统一封装起来，开发者只需要引入对应的 starter，就不用手动一个个引入 jar 包，也减少了版本冲突问题。
 
 比如引入 spring-boot-starter-web，就会自动引入 Spring MVC、内嵌 Tomcat，Jackson 等 web 开发相关依赖；引入 mybatis-spring-boot-starter，就会引入 MyBatis 和 Spring Boot 整合相关依赖。
 
@@ -1036,9 +1036,9 @@ JDBC 是 Java 原生操作数据库的 API，开发者需要自己管理连接�
 
 优先级：普通
 
-MyBatis 和 JPA/Hibernate 都是持久层框架，但侧重点不同。MyBatis 更偏 SQL 映射框架，SQL 主要由开发者自己编写，适合复杂 SQL 和需要精细控制 SQL 的场景。JPA、Hibernate 更偏向全 ORM 框架，可以根据对象关系自动生成 SQL，开发效率高，但复杂 SQL 控制起来不如 MyBatis 直观。实际 Java 后端项目中，如果业务 SQL 比较复杂，很多公司会更倾向使用 MyBatis。
+MyBatis 和 JPA / Hibernate 都是持久层框架，但侧重点不同。MyBatis 更偏 SQL 映射框架，SQL 主要由开发者自己编写，适合复杂 SQL 和需要精细控制 SQL 的场景。JPA / Hibernate 更偏向全 ORM 框架，可以根据对象关系自动生成 SQL，开发效率高，但复杂 SQL 控制起来不如 MyBatis 直观。实际 Java 后端项目中，如果业务 SQL 比较复杂，很多公司会更倾向使用 MyBatis。
 
-关键词：**MyBatis SQL 自己写、半 ORM、灵活可控、JPA/Hibernate 自动生成 SQL、全 ORM、复杂 SQL**
+关键词：**SQL 自己写、半 ORM、灵活可控、JPA / Hibernate、自动生成 SQL、全 ORM、复杂 SQL**
 
 ### MyBatis 为什么叫半 ORM 框架？
 
@@ -1046,7 +1046,7 @@ MyBatis 和 JPA/Hibernate 都是持久层框架，但侧重点不同。MyBatis �
 
 ORM 是对象关系映射，指的是把数据库表和 Java 对象进行映射。MyBatis 可以把 SQL 查询结果映射成 Java 对象，也可以把 Java 对象中的属性作为 SQL 参数传入，所以它具备 ORM 的一部分能力。但 MyBatis 的 SQL 主要还是由开发者自己编写，不像 Hibernate / JPA 那样自动生成大量 SQL，所以它通常被称为半 ORM 框架。
 
-关键词：ORM、对象关系映射、结果映射、SQL 自己写、半自动、区别于 JPA/Hibernate
+关键词：**ORM、对象关系映射、结果映射、SQL 自己写、半自动、JPA / Hibernate**
 
 ### Mapper 接口是什么？
 
@@ -1062,7 +1062,7 @@ Mapper 接口是 MyBatis 提供给 Java 代码调用数据库操作的接口。�
 
 Mapper XML 是 MyBatis 用来编写和管理 SQL 语句的 XML 文件。它里面可以写 select、insert、update、delete 等 SQL，并通过 namespace 和 id 与 Mapper 接口的方法建立对应关系。使用 Mapper XML 可以把 SQL 从 Java 代码中分离出来，方便编写复杂 SQL 和动态 SQL。
 
-关键词：**SQL 映射文件、select/insert/update/delete、namespace、id、复杂 SQL、动态 SQL**
+关键词：**SQL 映射文件、select / insert / update / delete、namespace、id、复杂 SQL、动态 SQL**
 
 ### Mapper 接口的方法如何和 XML 中的 SQL 对应？
 
@@ -1079,7 +1079,6 @@ Mapper 接口方法和 XML 中 SQL 的对应主要依靠 namespace 和 id。Mapp
 namespace 用来标识当前 Mapper XML 属于哪个 Mapper 接口，通常写 Mapper 接口的全限定名。MyBatis 会通过 namespace 加 SQL 的 id 来唯一定位一条 SQL 语句。这样既能把 XML 和 Mapper 接口绑定起来，也能避免不同 XML 中 SQL id 重名导致冲突。
 
 关键词：**Mapper 接口全限定名、绑定 XML 和接口、唯一定位 SQL、避免 id 冲突**
-
 
 ### id 有什么作用？
 
@@ -1101,7 +1100,7 @@ parameterType 用来指定 SQL 入参的 Java 类型，比如传入一个 User �
 
 优先级：普通
 
-resultType 是 MyBatis 中用于指定查询结果映射类型的属性。表示一条 SQL 查询出来的结果要封装成哪个 Java 类型。通常适用于数据库字段名和 Java 对象属性名能够自动对应的简单场景，比如查询用户表后直接映射成 Java 对象。
+resultType 是 MyBatis 中用于指定查询结果映射类型的属性。表示一条 SQL 查询出来的结果要封装成哪个 Java 类型。通常适用于数据库字段名和 Java 对象属性名能够自动对应的简单场景，比如查询用户表后直接映射成 User 对象。
 
 关键词：**返回结果类型、简单映射、字段名和属性名自动对应、Java 对象**
 
@@ -1135,7 +1134,7 @@ resultType 和 resultMap 都用于处理查询结果映射。resultType 是直�
 
 优先级：最重要
 
-Spring Boot 整合 MyBatis 通常先引入 `mybatis-spring-boot-starter`，然后在 `application.yml` 中配置数据源、Mapper XML 路径等信息。接着通过 `@Mapper` 或 `@MapperScan` 扫描 Mapper 接口，Service 层就可以直接注入 Mapper 调用数据库。Spring Boot 会自动配置 DataSource、SqlSessionFactory、SqlSessionTemplate 等对象，所以不需要像传统 SSM 那样手写大量 XML 配置。
+Spring Boot 整合 MyBatis 通常先引入 mybatis-spring-boot-starter，然后在 application.yml 中配置数据源、Mapper XML 路径等信息。接着通过 @Mapper 或 @MapperScan 扫描 Mapper 接口，Service 层就可以直接注入 Mapper 调用数据库。Spring Boot 会自动配置 DataSource、SqlSessionFactory、SqlSessionTemplate 等对象，所以不需要像传统 SSM 那样手写大量 XML 配置。
 
 关键词：**mybatis-spring-boot-starter、DataSource、Mapper XML、@Mapper、@MapperScan、自动配置**
 
@@ -1143,7 +1142,7 @@ Spring Boot 整合 MyBatis 通常先引入 `mybatis-spring-boot-starter`，然�
 
 优先级：普通
 
-`mybatis-spring-boot-starter` 是 MyBatis 提供给 Spring Boot 的起步依赖。它会引入 MyBatis 和 Spring 整合所需的依赖，并配合 Spring Boot 自动配置机制，根据数据源自动创建 SqlSessionFactory、SqlSessionTemplate，同时支持 Mapper 接口扫描。简单说，它让 MyBatis 可以更方便地接入 Spring Boot 项目。
+mybatis-spring-boot-starter 是 MyBatis 提供给 Spring Boot 的起步依赖。它会引入 MyBatis 和 Spring 整合所需的依赖，并配合 Spring Boot 自动配置机制，根据数据源自动创建 SqlSessionFactory、SqlSessionTemplate，同时支持 Mapper 接口扫描。简单说，它让 MyBatis 可以更方便地接入 Spring Boot 项目。
 
 关键词：**起步依赖、自动配置、SqlSessionFactory、SqlSessionTemplate、Mapper 扫描、Spring Boot 整合**
 
@@ -1191,7 +1190,7 @@ Mapper 接口通常没有手写实现类，但项目运行时可以直接注入�
 
 优先级：最重要
 
-`@Mapper` 是加在单个 Mapper 接口上的注解，用来告诉 Spring 这个接口需要交给 MyBatis 创建代理对象。`@MapperScan` 一般加在启动类或配置类上，用来批量扫描某个包下的所有 Mapper 接口。Mapper 少时可以用 `@Mapper`，项目中 Mapper 多时更常用 `@MapperScan`。
+@Mapper 是加在单个 Mapper 接口上的注解，用来告诉 Spring 这个接口需要交给 MyBatis 创建代理对象。@MapperScan 一般加在启动类或配置类上，用来批量扫描某个包下的所有 Mapper 接口。Mapper 少时可以用 @Mapper，项目中 Mapper 多时更常用 @MapperScan。
 
 关键词：**@Mapper 单个接口、@MapperScan 批量扫描、Mapper 代理对象、启动类、配置类**
 
@@ -1215,7 +1214,7 @@ Spring Boot 整合 MyBatis 后，会根据配置自动创建数据源相关对�
 
 优先级：了解即可
 
-`application.properties` 和 `application.yml` 都是 Spring Boot 的配置文件，只是写法不同。properties 使用 key-value 形式，yml 使用层级缩进形式。它们都可以配置端口、数据库连接、Redis、MyBatis、日志等信息。实际项目中二选一即可，团队统一风格更重要。
+application.properties 和 application.yml 都是 Spring Boot 的配置文件，只是写法不同。properties 使用 key-value 形式，yml 使用层级缩进形式。它们都可以配置端口、数据库连接、Redis、MyBatis、日志等信息。实际项目中二选一即可，团队统一风格更重要。
 
 关键词：**Spring Boot 配置文件、properties、yml、层级配置、数据库、Redis、MyBatis**
 
@@ -1225,7 +1224,7 @@ Spring Boot 整合 MyBatis 后，会根据配置自动创建数据源相关对�
 
 优先级：最重要
 
-`#{}` 和 `${}` 都可以在 MyBatis 的 SQL 中取参数，但底层处理方式不同。`#{}` 使用预编译占位符方式，参数会作为值传入 SQL，类似 PreparedStatement，可以防止 SQL 注入。`${}` 是字符串拼接，会把参数内容直接拼接到 SQL 中，存在 SQL 注入风险。实际开发中普通参数传值优先使用 `#{}`，只有表名、字段名、排序字段这类无法用占位符的位置，才可能使用 `${}`，并且必须做好白名单校验。
+#{} 和 ${} 都可以在 MyBatis 的 SQL 中取参数，但底层处理方式不同。#{} 使用预编译占位符方式，参数会作为值传入 SQL，类似 PreparedStatement，可以防止 SQL 注入。${} 是字符串拼接，会把参数内容直接拼接到 SQL 中，存在 SQL 注入风险。实际开发中普通参数传值优先使用 #{}，只有表名、字段名、排序字段这类无法用占位符的位置，才可能使用 ${}，并且必须做好白名单校验。
 
 关键词：**#{} 预编译、PreparedStatement、参数绑定、防 SQL 注入、${} 字符串拼接、白名单校验**
 
@@ -1233,7 +1232,7 @@ Spring Boot 整合 MyBatis 后，会根据配置自动创建数据源相关对�
 
 优先级：最重要
 
-因为 `#{}` 底层使用的是预编译占位符，用户输入会被当作参数值处理，而不是直接拼接成 SQL 语句的一部分。数据库会先确定 SQL 结构，再把参数传进去执行，所以即使用户输入了 `or 1=1` 这类内容，也只会被当作普通字符串值，不会改变原来的 SQL 语义。
+因为 #{} 底层使用的是预编译占位符，用户输入会被当作参数值处理，而不是直接拼接成 SQL 语句的一部分。数据库会先确定 SQL 结构，再把参数传进去执行，所以即使用户输入了 or 1=1 这类内容，也只会被当作普通字符串值，不会改变原来的 SQL 语义。
 
 关键词：**预编译、占位符、SQL 结构先确定、参数值、PreparedStatement、防 SQL 注入**
 
@@ -1241,7 +1240,7 @@ Spring Boot 整合 MyBatis 后，会根据配置自动创建数据源相关对�
 
 优先级：最重要
 
-`${}` 一般只适合用在不能使用占位符的位置，比如动态表名、动态字段名、动态排序字段等。比如 `order by ${sortField}` 这种场景，字段名不能用 `#{}` 当作普通值传入。但使用 `${}` 时必须对参数做白名单校验，只允许传入后端明确支持的字段，不能直接信任前端传来的字符串。
+${} 一般只适合用在不能使用占位符的位置，比如动态表名、动态字段名、动态排序字段等。比如 order by ${sortField} 这种场景，字段名不能用 #{} 当作普通值传入。但使用 ${} 时必须对参数做白名单校验，只允许传入后端明确支持的字段，不能直接信任前端传来的字符串。
 
 关键词：**动态表名、动态字段名、order by、字符串拼接、SQL 注入风险、白名单校验**
 
@@ -1249,7 +1248,7 @@ Spring Boot 整合 MyBatis 后，会根据配置自动创建数据源相关对�
 
 优先级：最重要
 
-MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。比如查询用户时，有时按用户名查，有时按状态查，有时两个条件都有，这时就可以使用 `if`、`where`、`set`、`foreach` 等标签来动态生成 SQL，避免在 Java 代码中手动拼接字符串。
+MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。比如查询用户时，有时按用户名查，有时按状态查，有时两个条件都有，这时就可以使用 if、where、set、foreach 等标签来动态生成 SQL，避免在 Java 代码中手动拼接字符串。
 
 关键词：**动态拼接 SQL、if、where、set、foreach、条件查询、避免手写字符串拼接**
 
@@ -1257,13 +1256,7 @@ MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。�
 
 优先级：最重要
 
-`if` 标签用于根据条件决定某段 SQL 是否出现。比如查询条件中 username 不为空时才拼接 `and username = #{username}`。它常用于多条件查询、可选参数查询等场景。
-
-```xml
-<if test="username != null and username != ''">
-    and username = #{username}
-</if>
-```
+if 标签用于根据条件决定某段 SQL 是否出现。比如查询条件中 username 不为空时才拼接 and username = #{username}。它常用于多条件查询、可选参数查询等场景。
 
 关键词：**条件判断、可选查询条件、多条件查询、test 表达式**
 
@@ -1271,7 +1264,7 @@ MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。�
 
 优先级：最重要
 
-`where` 标签用来智能处理 SQL 中的 `where` 关键字。如果内部有条件成立，它会自动加上 `where`；如果第一个条件前面多了 `and` 或 `or`，它也会自动去掉。这样可以避免动态 SQL 中出现 `where and ...` 这类语法错误。
+where 标签用来智能处理 SQL 中的 where 关键字。如果内部有条件成立，它会自动加上 where；如果第一个条件前面多了 and 或 or，它也会自动去掉。这样可以避免动态 SQL 中出现 where and ... 这类语法错误。
 
 关键词：**自动添加 where、去掉多余 and/or、动态查询、防止 SQL 语法错误**
 
@@ -1279,14 +1272,7 @@ MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。�
 
 优先级：普通
 
-`set` 标签主要用于动态更新语句。它会自动添加 `set` 关键字，并去掉最后多余的逗号，适合只更新非空字段的场景。
-
-```xml
-<set>
-    <if test="username != null">username = #{username},</if>
-    <if test="status != null">status = #{status},</if>
-</set>
-```
+set 标签主要用于动态更新语句。它会自动添加 set 关键字，并去掉最后多余的逗号，适合只更新非空字段的场景。
 
 关键词：**动态 update、自动添加 set、去掉多余逗号、只更新非空字段**
 
@@ -1294,13 +1280,7 @@ MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。�
 
 优先级：最重要
 
-`foreach` 标签用于遍历集合或数组，常见场景是批量删除、批量查询、批量新增。比如根据多个 id 查询数据时，可以用 foreach 拼接 `in` 条件。
-
-```xml
-<foreach collection="ids" item="id" open="(" separator="," close=")">
-    #{id}
-</foreach>
-```
+foreach 标签用于遍历集合或数组，常见场景是批量删除、批量查询、批量新增。比如根据多个 id 查询数据时，可以用 foreach 拼接 in 条件。关键属性包括 collection、item、open、separator、close。
 
 关键词：**遍历集合、批量操作、in 查询、collection、item、open、separator、close**
 
@@ -1308,7 +1288,7 @@ MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。�
 
 优先级：了解即可
 
-`choose / when / otherwise` 类似 Java 中的 `if / else if / else`，用于多个条件中只选择一个分支。当满足某个 when 条件时，就不会继续判断后面的分支；如果所有 when 都不满足，就执行 otherwise。
+choose / when / otherwise 类似 Java 中的 if / else if / else，用于多个条件中只选择一个分支。当满足某个 when 条件时，就不会继续判断后面的分支；如果所有 when 都不满足，就执行 otherwise。
 
 关键词：**多分支选择、if else、choose、when、otherwise、只走一个分支**
 
@@ -1316,7 +1296,7 @@ MyBatis 动态 SQL 是指根据不同参数条件动态拼接 SQL 的能力。�
 
 优先级：最重要
 
-MyBatis 多个参数可以通过 `@Param` 指定参数名，也可以封装成 DTO、实体对象或 Map 传入。实际项目中，如果参数属于一个业务请求，通常更推荐封装成 DTO；如果只是少量简单参数，可以使用 `@Param`。
+MyBatis 多个参数可以通过 @Param 指定参数名，也可以封装成 DTO、实体对象或 Map 传入。实际项目中，如果参数属于一个业务请求，通常更推荐封装成 DTO；如果只是少量简单参数，可以使用 @Param。
 
 关键词：**@Param、DTO、实体对象、Map、多参数绑定、参数名**
 
@@ -1324,7 +1304,7 @@ MyBatis 多个参数可以通过 `@Param` 指定参数名，也可以封装成 D
 
 优先级：最重要
 
-`@Param` 用来给 Mapper 方法参数指定名称，方便在 XML 中通过这个名称取值。特别是 Mapper 方法有多个参数时，如果不使用 `@Param`，XML 中直接写参数名可能无法正确识别。使用 `@Param("id")` 后，XML 中就可以通过 `#{id}` 获取该参数。
+@Param 用来给 Mapper 方法参数指定名称，方便在 XML 中通过这个名称取值。特别是 Mapper 方法有多个参数时，如果不使用 @Param，XML 中直接写参数名可能无法正确识别。使用 @Param("id") 后，XML 中就可以通过 #{id} 获取该参数。
 
 关键词：**参数命名、多参数、XML 取值、#{id}、Mapper 方法参数**
 
@@ -1332,7 +1312,7 @@ MyBatis 多个参数可以通过 `@Param` 指定参数名，也可以封装成 D
 
 优先级：普通
 
-对象参数适合业务字段较明确的场景，XML 中可以直接通过对象属性名取值，比如 `#{username}`。Map 参数适合字段不固定的场景，XML 中通过 key 取值。集合参数常用于批量操作，通常配合 `foreach` 使用；如果集合参数需要自定义名字，可以配合 `@Param`。
+对象参数适合业务字段较明确的场景，XML 中可以直接通过对象属性名取值，比如 #{username}。Map 参数适合字段不固定的场景，XML 中通过 key 取值。集合参数常用于批量操作，通常配合 foreach 使用；如果集合参数需要自定义名字，可以配合 @Param。
 
 关键词：**对象属性取值、Map key 取值、集合参数、foreach、@Param**
 
@@ -1340,13 +1320,7 @@ MyBatis 多个参数可以通过 `@Param` 指定参数名，也可以封装成 D
 
 优先级：最重要
 
-模糊查询推荐使用 `concat` 配合 `#{}`，不要直接用 `${}` 拼接用户输入。比如：
-
-```sql
-where name like concat('%', #{keyword}, '%')
-```
-
-这样既能实现模糊查询，又能避免 SQL 注入风险。
+模糊查询推荐使用 concat 配合 #{}，不要直接用 ${} 拼接用户输入。比如 where name like concat('%', #{keyword}, '%')。这样既能实现模糊查询，又能避免 SQL 注入风险。
 
 关键词：**like、concat、#{}、模糊查询、防 SQL 注入**
 
@@ -1354,7 +1328,7 @@ where name like concat('%', #{keyword}, '%')
 
 优先级：普通
 
-批量操作一般使用 `foreach` 标签。批量删除和批量查询常用 `in` 条件，批量新增可以遍历集合拼接多组 values。关键是通过 `collection` 指定集合名，通过 `item` 表示当前遍历元素。
+批量操作一般使用 foreach 标签。批量删除和批量查询常用 in 条件，批量新增可以遍历集合拼接多组 values。关键是通过 collection 指定集合名，通过 item 表示当前遍历元素。
 
 关键词：**foreach、批量新增、批量删除、批量查询、in、values、collection、item**
 
@@ -1438,7 +1412,7 @@ Mapper / DAO 层负责和数据库交互，主要定义增删改查方法，并�
 
 优先级：最重要
 
-登录时，前端调用 `/api/v1/auth/login` 并传入用户名或手机号、密码。请求进入 AuthController 后，Controller 调用 AuthServiceImpl 的 login 方法。Service 先校验参数，再通过 AuthMapper 根据用户名或手机号查询用户。如果用户不存在、状态不合法或密码校验失败，就抛出异常；密码校验通过后，使用 BCrypt 校验密码，并通过 JwtUtils 生成 JWT，最后封装 LoginVO 和 Result 返回给前端。
+登录时，前端调用 /api/v1/auth/login 并传入用户名或手机号、密码。请求进入 AuthController 后，Controller 调用 AuthServiceImpl 的 login 方法。Service 先校验参数，再通过 AuthMapper 根据用户名或手机号查询用户。如果用户不存在、状态不合法或密码校验失败，就抛出异常；密码校验通过后，使用 BCrypt 校验密码，并通过 JwtUtils 生成 JWT，最后封装 LoginVO 和 Result 返回给前端。
 
 关键词：**/api/v1/auth/login、AuthController、AuthServiceImpl、AuthMapper、BCrypt、JwtUtils、LoginVO、Result**
 
@@ -1488,7 +1462,7 @@ DTO 主要用于接收前端请求参数，比如登录 DTO、注册 DTO、评�
 
 优先级：最重要
 
-我项目中主要通过 Spring Boot 和注解方式管理对象。比如 Controller 使用 `@RestController`，Service 使用 `@Service`，Mapper 使用 `@Mapper` 或 Mapper 扫描，配置类使用 `@Configuration`。这些类会被 Spring 扫描并注册成 Bean，之后对象的创建、生命周期和依赖关系都交给 Spring 容器管理。
+我项目中主要通过 Spring Boot 和注解方式管理对象。比如 Controller 使用 @RestController，Service 使用 @Service，Mapper 使用 @Mapper 或 Mapper 扫描，配置类使用 @Configuration。这些类会被 Spring 扫描并注册成 Bean，之后对象的创建、生命周期和依赖关系都交给 Spring 容器管理。
 
 关键词：**Spring 容器、Bean、@RestController、@Service、@Mapper、@Configuration、IOC**
 
@@ -1504,7 +1478,7 @@ Mapper 接口会被 MyBatis 扫描并生成代理对象，然后注册到 Spring
 
 优先级：最重要
 
-Controller 接收参数主要有几种方式：请求体中的 JSON 使用 `@RequestBody` 绑定到 DTO；URL 路径中的变量使用 `@PathVariable`；查询参数或表单参数使用 `@RequestParam`；请求头中的 token 可以使用 `@RequestHeader` 或在拦截器中读取。项目中登录、注册、评价发布这类复杂请求一般会使用 DTO 接收。
+Controller 接收参数主要有几种方式：请求体中的 JSON 使用 @RequestBody 绑定到 DTO；URL 路径中的变量使用 @PathVariable；查询参数或表单参数使用 @RequestParam；请求头中的 token 可以使用 @RequestHeader 或在拦截器中读取。项目中登录、注册、评价发布这类复杂请求一般会使用 DTO 接收。
 
 关键词：**@RequestBody、DTO、@PathVariable、@RequestParam、@RequestHeader、JSON 参数绑定**
 
@@ -1520,7 +1494,7 @@ Controller 接收参数主要有几种方式：请求体中的 JSON 使用 `@Req
 
 优先级：最重要
 
-项目使用 JWT 和拦截器进行登录鉴权。用户登录成功后，后端生成 JWT 返回给前端，前端后续请求在 Authorization 请求头中携带 `Bearer token`。请求进入 Controller 之前，LoginCheckInterceptor 会拦截请求，解析 token，校验合法性，并把 userId 放入 request，后续业务就可以知道当前登录用户是谁。
+项目使用 JWT 和拦截器进行登录鉴权。用户登录成功后，后端生成 JWT 返回给前端，前端后续请求在 Authorization 请求头中携带 Bearer token。请求进入 Controller 之前，LoginCheckInterceptor 会拦截请求，解析 token，校验合法性，并把 userId 放入 request，后续业务就可以知道当前登录用户是谁。
 
 关键词：**JWT、Authorization、Bearer token、LoginCheckInterceptor、解析 token、userId、request**
 
@@ -1528,7 +1502,7 @@ Controller 接收参数主要有几种方式：请求体中的 JSON 使用 `@Req
 
 优先级：最重要
 
-项目中通过全局异常处理器统一处理异常。业务层遇到账号密码错误、验证码错误、资源不存在等情况时，可以抛出异常，由 `@RestControllerAdvice` 和 `@ExceptionHandler` 统一捕获，再转换成统一 Result 返回给前端。这样可以避免每个 Controller 都写 try-catch，也能保证错误响应格式一致。
+项目中通过全局异常处理器统一处理异常。业务层遇到账号密码错误、验证码错误、资源不存在等情况时，可以抛出异常，由 @RestControllerAdvice 和 @ExceptionHandler 统一捕获，再转换成统一 Result 返回给前端。这样可以避免每个 Controller 都写 try-catch，也能保证错误响应格式一致。
 
 关键词：**全局异常处理、@RestControllerAdvice、@ExceptionHandler、业务异常、Result、统一错误响应**
 
@@ -1536,7 +1510,7 @@ Controller 接收参数主要有几种方式：请求体中的 JSON 使用 `@Req
 
 优先级：最重要
 
-项目中涉及多个数据库写操作或需要保证数据一致性的地方适合加事务，比如发布评价、删除评价、点赞或取消点赞、回复评价等。如果这些操作中途失败，应该回滚已经执行的数据库修改，避免出现部分成功、部分失败的数据不一致问题。Spring 中通常使用 `@Transactional` 来管理事务。
+项目中涉及多个数据库写操作或需要保证数据一致性的地方适合加事务，比如发布评价、删除评价、点赞或取消点赞、回复评价等。如果这些操作中途失败，应该回滚已经执行的数据库修改，避免出现部分成功、部分失败的数据不一致问题。Spring 中通常使用 @Transactional 来管理事务。
 
 关键词：**@Transactional、写操作、数据一致性、发布评价、删除评价、点赞、回滚**
 

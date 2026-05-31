@@ -447,6 +447,258 @@ List<? super T> 表示元素类型是 T 或 T 的父类，也叫下界通配符�
 
 
 
+## 多线程与并发
+
+### 进程和线程的区别？
+
+优先级：最重要
+
+进程是操作系统进行资源分配的基本单位，一个进程拥有独立的内存空间和系统资源。线程是 CPU 调度的基本单位，一个进程中可以有多个线程，多个线程共享同一个进程的内存和资源。
+
+进程之间相互独立，切换开销较大；线程之间共享进程资源，切换开销较小，但也会带来线程安全问题。Java 后端开发中，多线程主要用于提高程序并发处理能力，比如 Web 服务器同时处理多个请求、线程池异步执行任务等。
+
+关键词：**进程、线程、资源分配、CPU 调度、共享内存、线程安全**
+
+### 并发和并行的区别？
+
+优先级：普通
+
+并发是指多个任务在同一段时间内交替执行，看起来像是同时进行，强调的是任务调度能力。并行是指多个任务在同一时刻真正同时执行，通常需要多核 CPU 支持。
+
+比如单核 CPU 上多个线程通过时间片切换执行，这是并发；多核 CPU 上多个线程同时在不同核心上运行，这是并行。实际开发中我们常说的高并发，更多强调的是系统同时处理大量请求的能力。
+
+关键词：**并发、并行、时间片切换、多核 CPU、高并发**
+
+### 创建线程有哪些方式？
+
+优先级：最重要
+
+Java 中创建线程常见方式有：继承 Thread 类、实现 Runnable 接口、实现 Callable 接口配合 FutureTask、使用线程池。
+
+继承 Thread 比较简单，但 Java 单继承限制较大；实现 Runnable 更灵活，适合把任务和线程本身解耦；Callable 可以有返回值，也可以抛出异常；实际开发中更推荐使用线程池，因为线程池可以复用线程、统一管理线程资源，避免频繁创建和销毁线程。
+
+关键词：**Thread、Runnable、Callable、FutureTask、线程池、任务和线程解耦**
+
+### start() 和 run() 的区别？
+
+优先级：最重要
+
+调用 start() 会真正启动一个新线程，由 JVM 调度后执行线程中的 run() 方法。调用 run() 只是普通方法调用，不会创建新线程，代码仍然在当前线程中执行。
+
+所以启动线程必须调用 start()，不能直接调用 run()。直接调用 run() 不会产生多线程效果。
+
+关键词：**start 启动新线程、run 普通方法调用、JVM 调度、当前线程**
+
+### 线程的生命周期有哪些状态？
+
+优先级：普通
+
+Java 线程常见状态有 NEW、RUNNABLE、BLOCKED、WAITING、TIMED_WAITING、TERMINATED。
+
+NEW 表示线程对象刚创建但还没有 start；RUNNABLE 表示线程可运行，可能正在运行也可能等待 CPU 时间片；BLOCKED 表示等待获取锁；WAITING 表示无限期等待其他线程唤醒；TIMED_WAITING 表示带超时时间的等待，比如 sleep、wait(timeout)、join(timeout)；TERMINATED 表示线程执行结束。
+
+关键词：**NEW、RUNNABLE、BLOCKED、WAITING、TIMED_WAITING、TERMINATED**
+
+### sleep() 和 wait() 的区别？
+
+优先级：最重要
+
+sleep() 是 Thread 类的方法，用来让当前线程休眠指定时间，休眠期间不会释放已经持有的锁。wait() 是 Object 类的方法，必须在 synchronized 同步代码块或同步方法中使用，调用后会释放当前对象锁，并进入等待状态，等待其他线程调用 notify 或 notifyAll 唤醒。
+
+简单来说，sleep 是让线程暂停一会儿，不释放锁；wait 是线程间通信机制，会释放锁。
+
+关键词：**sleep、wait、是否释放锁、Object、Thread、线程通信**
+
+### synchronized 是什么？
+
+优先级：最重要
+
+synchronized 是 Java 提供的内置锁机制，可以保证同一时刻只有一个线程进入被 synchronized 修饰的同步代码块或同步方法。它可以用来解决多个线程同时修改共享变量导致的数据不一致问题。
+
+synchronized 可以修饰实例方法、静态方法和代码块。修饰实例方法时锁的是当前对象 this；修饰静态方法时锁的是当前类的 Class 对象；修饰代码块时可以自己指定锁对象。
+
+关键词：**synchronized、内置锁、互斥、线程安全、对象锁、类锁**
+
+### synchronized 锁的是什么？
+
+优先级：最重要
+
+synchronized 锁的不是代码本身，而是对象。修饰普通实例方法时，锁的是当前对象 this；修饰静态方法时，锁的是类的 Class 对象；修饰同步代码块时，锁的是括号中指定的对象。
+
+只有多个线程竞争的是同一把锁时，synchronized 才能起到互斥效果。如果锁的不是同一个对象，就无法保证线程安全。
+
+关键词：**对象锁、类锁、this、Class 对象、同一把锁、互斥**
+
+### synchronized 和 ReentrantLock 的区别？
+
+优先级：最重要
+
+synchronized 是 Java 内置关键字，使用简单，不需要手动释放锁，发生异常时 JVM 也会自动释放锁。ReentrantLock 是 JUC 包中的显式锁，需要手动 lock 和 unlock，通常要在 finally 中释放锁。
+
+ReentrantLock 功能更丰富，支持可中断锁、公平锁、尝试获取锁 tryLock、多个条件队列 Condition 等。一般简单同步场景可以使用 synchronized，需要更灵活的锁控制时可以使用 ReentrantLock。
+
+关键词：**synchronized、ReentrantLock、显式锁、自动释放、tryLock、公平锁、Condition**
+
+### volatile 是什么？
+
+优先级：最重要
+
+volatile 是 Java 中用于修饰变量的关键字，主要保证变量的可见性和一定程度的有序性。一个线程修改 volatile 变量后，其他线程可以及时看到最新值；同时 volatile 可以禁止相关指令重排序。
+
+但 volatile 不能保证复合操作的原子性，比如 count++ 实际包含读取、加一、写回三个步骤，即使 count 使用 volatile 修饰，也不能保证多线程下结果一定正确。
+
+关键词：**volatile、可见性、有序性、禁止指令重排序、不保证原子性**
+
+### volatile 能保证原子性吗？
+
+优先级：最重要
+
+volatile 不能保证原子性。它可以保证线程读取到的是最新值，但不能保证多个操作作为一个整体不可分割。比如 i++ 看起来是一行代码，底层包含读取 i、加 1、写回 i 三个步骤，多个线程同时执行时仍然可能发生并发覆盖。
+
+如果要保证原子性，可以使用 synchronized、ReentrantLock 或 AtomicInteger 这类原子类。
+
+关键词：**volatile、不保证原子性、i++、synchronized、Lock、AtomicInteger**
+
+### Java 内存模型 JMM 是什么？
+
+优先级：普通
+
+JMM 是 Java 内存模型，用来规范多线程环境下变量如何在主内存和工作内存之间交互。它主要解决可见性、原子性、有序性这几个并发问题。
+
+每个线程都有自己的工作内存，线程对共享变量的操作通常先发生在工作内存中，再同步回主内存。如果没有合适的同步机制，一个线程修改共享变量后，其他线程不一定能立刻看到最新结果。volatile、synchronized、Lock 等机制都和 JMM 的可见性、有序性保障有关。
+
+关键词：**JMM、主内存、工作内存、可见性、原子性、有序性**
+
+### 什么是线程安全？
+
+优先级：最重要
+
+线程安全是指在多线程环境下，多个线程同时访问同一段代码或同一个共享数据时，不会产生数据错误、不一致或不可预期的结果。
+
+线程安全问题通常出现在多个线程同时读写共享变量，并且操作不是原子的场景。解决方式包括避免共享可变数据、使用 synchronized 或 Lock 加锁、使用并发容器、使用原子类、使用 ThreadLocal 等。
+
+关键词：**线程安全、共享变量、并发修改、加锁、原子类、并发容器**
+
+### CAS 是什么？
+
+优先级：最重要
+
+CAS 是 Compare And Swap，比较并交换，是一种乐观锁思想。它在更新变量时会先比较当前值是否等于预期值，如果相等就更新为新值；如果不相等，说明被其他线程修改过，则更新失败，可以选择重试。
+
+Java 中很多原子类，比如 AtomicInteger，底层就使用 CAS 实现无锁并发更新。CAS 的优点是避免了传统加锁的阻塞开销，但也可能存在 ABA 问题和自旋重试开销。
+
+关键词：**CAS、比较并交换、乐观锁、AtomicInteger、无锁、自旋**
+
+### CAS 的 ABA 问题是什么？
+
+优先级：普通
+
+ABA 问题是指一个变量原来是 A，被其他线程改成 B，后来又改回 A。当前线程使用 CAS 检查时发现值还是 A，就以为这个值没有变化过，但实际上中间已经发生过修改。
+
+解决 ABA 问题常见方式是引入版本号，比如 AtomicStampedReference 会在比较值的同时比较版本号，只要中间发生过修改，版本号就会变化。
+
+关键词：**ABA、CAS、版本号、AtomicStampedReference**
+
+### ThreadLocal 是什么？
+
+优先级：最重要
+
+ThreadLocal 可以为每个线程保存一份独立的变量副本，不同线程之间互不影响。它常用于保存线程上下文信息，比如用户信息、请求上下文、数据库连接等。
+
+ThreadLocal 不是用来解决共享变量竞争的，而是通过让每个线程使用自己的变量副本来避免共享。使用 ThreadLocal 后要注意及时 remove，尤其在线程池场景下，线程会被复用，如果不清理可能造成数据串用或内存泄漏。
+
+关键词：**ThreadLocal、线程隔离、变量副本、线程池、remove、内存泄漏**
+
+### 线程池是什么？
+
+优先级：最重要
+
+线程池是用来统一管理和复用线程的机制。它会提前或按需创建一批线程，任务提交后由线程池中的线程执行，执行完后线程不会马上销毁，而是回到线程池继续复用。
+
+使用线程池可以减少频繁创建和销毁线程的开销，控制线程数量，避免线程过多导致系统资源耗尽，也方便统一管理任务执行。
+
+关键词：**线程池、线程复用、控制线程数量、减少创建销毁开销、任务管理**
+
+### 线程池的核心参数有哪些？
+
+优先级：最重要
+
+ThreadPoolExecutor 的核心参数包括 corePoolSize、maximumPoolSize、keepAliveTime、unit、workQueue、threadFactory、handler。
+
+corePoolSize 是核心线程数；maximumPoolSize 是最大线程数；keepAliveTime 是非核心线程空闲后的存活时间；workQueue 是任务队列；threadFactory 用来创建线程；handler 是拒绝策略，当线程池和队列都满了之后用来处理新任务。
+
+关键词：**corePoolSize、maximumPoolSize、keepAliveTime、workQueue、threadFactory、拒绝策略**
+
+### 线程池的执行流程是什么？
+
+优先级：最重要
+
+提交任务后，如果当前运行线程数小于 corePoolSize，就创建核心线程执行任务；如果核心线程已满，就把任务放入阻塞队列；如果队列也满了，并且线程数小于 maximumPoolSize，就创建非核心线程执行任务；如果线程数已经达到 maximumPoolSize 且队列也满了，就执行拒绝策略。
+
+关键词：**核心线程、任务队列、最大线程数、非核心线程、拒绝策略**
+
+### 线程池有哪些常见拒绝策略？
+
+优先级：普通
+
+常见拒绝策略有 AbortPolicy、CallerRunsPolicy、DiscardPolicy、DiscardOldestPolicy。
+
+AbortPolicy 是默认策略，直接抛出异常；CallerRunsPolicy 由提交任务的线程自己执行任务；DiscardPolicy 直接丢弃新任务，不抛异常；DiscardOldestPolicy 丢弃队列中最旧的任务，再尝试提交新任务。
+
+关键词：**AbortPolicy、CallerRunsPolicy、DiscardPolicy、DiscardOldestPolicy、拒绝策略**
+
+### execute() 和 submit() 的区别？
+
+优先级：普通
+
+execute() 用于提交没有返回值的 Runnable 任务，异常通常会直接抛到线程的异常处理器中。submit() 可以提交 Runnable 或 Callable，返回 Future，可以通过 Future 获取执行结果或异常。
+
+如果需要任务返回值或后续判断任务执行结果，可以使用 submit；如果只是简单执行任务，可以使用 execute。
+
+关键词：**execute、submit、Runnable、Callable、Future、返回值、异常处理**
+
+### 为什么不建议使用 Executors 创建线程池？
+
+优先级：普通
+
+Executors 提供了很多快捷创建线程池的方法，比如 newFixedThreadPool、newCachedThreadPool 等，但这些方法可能隐藏风险。例如 FixedThreadPool 使用无界队列，任务堆积过多可能导致 OOM；CachedThreadPool 最大线程数非常大，极端情况下可能创建大量线程耗尽资源。
+
+实际开发中更推荐直接使用 ThreadPoolExecutor，明确设置核心线程数、最大线程数、队列长度、线程工厂和拒绝策略，让线程池行为更可控。
+
+关键词：**Executors、无界队列、OOM、线程数失控、ThreadPoolExecutor、参数可控**
+
+### 如何设置线程池大小？
+
+优先级：了解即可
+
+线程池大小要根据任务类型和机器资源综合判断。CPU 密集型任务主要消耗 CPU，线程数一般接近 CPU 核心数或核心数 + 1。IO 密集型任务会有大量等待时间，可以设置比 CPU 核心数更多的线程。
+
+实际项目中不能只靠公式，还要结合接口耗时、QPS、CPU 使用率、队列堆积情况、压测结果来调整。
+
+关键词：**CPU 密集型、IO 密集型、CPU 核心数、QPS、压测、队列堆积**
+
+### ConcurrentHashMap 为什么线程安全？
+
+优先级：普通
+
+ConcurrentHashMap 是线程安全的 Map。JDK 8 中它底层仍然是数组 + 链表 + 红黑树结构，但并发控制主要使用 CAS 和 synchronized。
+
+插入元素时，如果桶为空，会通过 CAS 放入节点；如果桶不为空，会对桶头节点加 synchronized 锁，只锁当前桶，锁粒度比较小。相比 Hashtable 对整个方法加锁，ConcurrentHashMap 并发性能更好。
+
+关键词：**ConcurrentHashMap、线程安全、CAS、synchronized、桶级别锁、JDK 8**
+
+### CountDownLatch、Semaphore、CyclicBarrier 分别是什么？
+
+优先级：了解即可
+
+CountDownLatch 可以让一个或多个线程等待其他线程完成操作，计数器减到 0 后继续执行。Semaphore 是信号量，用来控制同时访问某个资源的线程数量。CyclicBarrier 可以让一组线程互相等待，直到所有线程都到达屏障点后再一起继续执行。
+
+面试中先知道它们分别解决什么问题即可，源码细节暂时不用深挖。
+
+关键词：**CountDownLatch、Semaphore、CyclicBarrier、线程协调、并发工具类**
+
+
+
 ## 反射
 
 ### 反射是什么？
@@ -484,3 +736,21 @@ List<? super T> 表示元素类型是 T 或 T 的父类，也叫下界通配符�
 注解通常和反射搭配使用，注解负责提供标记信息，反射通过在运行时动态获取这些信息并进行处理，比如 Spring 扫描到有@Service 的类后可以通过反射创建对象并放进 IOC 容器。
 
 ### Spring 中常见注解有哪些？
+
+优先级：普通
+
+Spring 中常见注解可以按作用分几类。
+
+第一类是组件注册相关注解，比如 @Component、@Controller、@RestController、@Service、@Repository，用来把类交给 Spring 容器管理。
+
+第二类是依赖注入相关注解，比如 @Autowired、@Resource、@Qualifier，用来给 Bean 注入依赖对象。
+
+第三类是配置相关注解，比如 @Configuration、@Bean、@Value、@ConfigurationProperties，用来定义配置类、注册第三方 Bean 或读取配置文件。
+
+第四类是 Web 接口相关注解，比如 @RequestMapping、@GetMapping、@PostMapping、@RequestBody、@RequestParam、@PathVariable、@RequestHeader，用来处理请求路径、请求参数和请求体。
+
+第五类是事务和异常处理相关注解，比如 @Transactional、@RestControllerAdvice、@ExceptionHandler。
+
+面试中不用一口气背全，重点说清楚：Spring 常见注解主要用于 Bean 管理、依赖注入、配置、Web 请求处理、事务和异常处理。
+
+关键词：**@Component、@Service、@RestController、@Autowired、@Configuration、@Bean、@RequestBody、@Transactional、@ExceptionHandler**

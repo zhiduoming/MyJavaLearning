@@ -51,17 +51,22 @@ class Solution {
         return ans;
     }
 
-    public void dfs(int n , int k , int start){
+    public void dfs(int n, int k, int start){
         if(path.size()==k){
             ans.add(new ArrayList<>(path));
             return;
         }
+
         for (int i = start; i <= n; i++) {
-            if(n-i+1<k-path.size()) break;
+            if(n-i+1<k-path.size()){
+                break;
+            }
             path.add(i);
             dfs(n,k,i+1);
             path.removeLast();
         }
     }
+
+
 }
 //leetcode submit region end(Prohibit modification and deletion)
